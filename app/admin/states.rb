@@ -1,10 +1,15 @@
 # app/admin/state.rb
 ActiveAdmin.register State do
+  menu parent: "Geographical Units"
   permit_params :state_id, :state_code, :state_name, :state_hq, :state_detail, :state_pop11,
                 :state_area, :state_density, :state_web, :state_lang1, :state_lang2, :state_logi,
                 :state_lati, :state_reach_img, :state_map, :estd_dd, :estd_mm, :estd_yy,
                 :state_seo_kword, :state_seo_mtag, :state_seo_data, :state_block, :state_sdist,
                 :state_p_status, :state_status
+  filter :state_name
+  filter :city
+  filter :district
+  filter :area
 
   index do
     selectable_column

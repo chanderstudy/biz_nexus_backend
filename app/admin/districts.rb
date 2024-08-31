@@ -1,9 +1,14 @@
 # app/admin/district.rb
 ActiveAdmin.register District do
+  menu parent: "Geographical Units"
   permit_params :dist_id, :state_id, :dist_cd, :dist_name, :dist_hq, :dist_detail, :dist_pop11,
                 :dist_area, :dist_density, :dist_web, :dist_lang1, :dist_lang2, :dist_logi,
                 :dist_lati, :dist_reach_img, :dist_map, :estd_dd, :estd_mm, :estd_yy, :dist_seo_kword,
                 :dist_seo_mtag, :dist_seo_data, :dist_block, :dist_sdist, :dist_p_status, :dist_status
+  filter :dist_name
+  filter :state
+  filter :city
+  filter :area
 
   index do
     selectable_column

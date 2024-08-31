@@ -1,9 +1,20 @@
 # app/admin/city.rb
 ActiveAdmin.register City do
+  menu parent: "Geographical Units"
   permit_params :city_id, :dist_id, :state_id, :city_name, :city_detail, :city_lang1, :city_lang2,
                 :city_logi, :city_lati, :city_reach_img, :city_map, :city_seo_kword, :city_seo_mtag,
                 :city_seo_data, :city_pop11, :city_area, :city_density, :city_star, :city_type,
                 :city_tier, :city_smart, :crime_level, :sdist_id, :city_p_status, :city_status
+
+  filter :city_name
+  filter :state
+  filter :district
+  filter :area
+
+  # Nested filter for business cards
+  filter :business_cards_name, as: :string, label: 'Business Card Name'
+  filter :business_cards_owner_name, as: :string, label: 'Business Card Owner'
+  filter :business_cards_email, as: :string, label: 'Business Card Email'
 
   index do
     selectable_column

@@ -16,9 +16,8 @@ class AdminUser < ApplicationRecord
   end
 
   def self.ransackable_attributes(auth_object = nil)
-    %w[id email created_at updated_at] # Add any other attributes you want to be searchable
+    %w[id email created_at updated_at reset_password_token] # Add reset_password_token to the list
   end
-
   # You can also define which associations can be searched
   # def self.ransackable_associations(auth_object = nil)
   #   %w[roles]

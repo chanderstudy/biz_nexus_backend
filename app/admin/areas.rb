@@ -1,8 +1,14 @@
 # app/admin/area.rb
 ActiveAdmin.register Area do
+  menu parent: "Geographical Units"
   permit_params :area_id, :city_id, :dist_id, :state_id, :area_name, :area_detail, :area_reach_img,
                 :area_map, :area_star, :crime_level, :area_status, :area_logi, :area_lati,
                 :area_type, :area_pin, :area_seo_kword, :area_seo_mtag, :area_seo_data, :area_p_status
+
+  filter :area_name
+  filter :state
+  filter :city
+  filter :district
 
   index do
     selectable_column

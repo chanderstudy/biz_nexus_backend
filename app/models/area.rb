@@ -2,6 +2,7 @@
 class Area < ApplicationRecord
   belongs_to :city
   belongs_to :district, foreign_key: :dist_id
+  has_many :business_cards, foreign_key: :area_id, primary_key: :area_id
   belongs_to :state
 
   validates :area_id, presence: true, uniqueness: true

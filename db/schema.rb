@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_08_25_075609) do
+ActiveRecord::Schema[7.2].define(version: 2024_08_31_151228) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -67,6 +67,69 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_25_075609) do
     t.index ["city_id"], name: "index_areas_on_city_id"
     t.index ["dist_id"], name: "index_areas_on_dist_id"
     t.index ["state_id"], name: "index_areas_on_state_id"
+  end
+
+  create_table "business_cards", force: :cascade do |t|
+    t.string "name", limit: 128, null: false
+    t.string "owner_name", limit: 128
+    t.string "email", limit: 64
+    t.string "address", limit: 128
+    t.string "landmark", limit: 128
+    t.string "mobile", limit: 32
+    t.string "latitude"
+    t.string "longitude"
+    t.integer "bcard_type"
+    t.integer "bcard_power"
+    t.bigint "business_category_id"
+    t.bigint "business_sub_category_id"
+    t.integer "pstatus"
+    t.integer "status"
+    t.boolean "seo_active", default: false
+    t.bigint "business_seo_profile_id"
+    t.bigint "social_media_profile_id"
+    t.string "website", limit: 94
+    t.string "bank_account", limit: 15
+    t.string "bank_ifsc"
+    t.integer "bank_type"
+    t.boolean "qrcode_active", default: false
+    t.string "qrcode_file", limit: 128
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "state_id"
+    t.bigint "district_id"
+    t.bigint "city_id"
+    t.bigint "area_id"
+    t.index ["area_id"], name: "index_business_cards_on_area_id"
+    t.index ["business_category_id"], name: "index_business_cards_on_business_category_id"
+    t.index ["business_seo_profile_id"], name: "index_business_cards_on_business_seo_profile_id"
+    t.index ["business_sub_category_id"], name: "index_business_cards_on_business_sub_category_id"
+    t.index ["city_id"], name: "index_business_cards_on_city_id"
+    t.index ["district_id"], name: "index_business_cards_on_district_id"
+    t.index ["social_media_profile_id"], name: "index_business_cards_on_social_media_profile_id"
+    t.index ["state_id"], name: "index_business_cards_on_state_id"
+  end
+
+  create_table "business_categories", force: :cascade do |t|
+    t.string "name", limit: 128
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "business_seo_profiles", force: :cascade do |t|
+    t.boolean "active", default: false
+    t.string "keywords", limit: 512
+    t.string "meta_tag", limit: 256
+    t.string "description", limit: 256
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "business_sub_categories", force: :cascade do |t|
+    t.bigint "business_category_id"
+    t.string "name", limit: 128
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["business_category_id"], name: "index_business_sub_categories_on_business_category_id"
   end
 
   create_table "cities", primary_key: "city_id", force: :cascade do |t|
@@ -139,6 +202,16 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_25_075609) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "social_media_profiles", force: :cascade do |t|
+    t.string "facebook", limit: 15
+    t.string "youtube", limit: 15
+    t.string "instagram", limit: 15
+    t.string "linkedin", limit: 15
+    t.string "other", limit: 15
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "states", primary_key: "state_id", force: :cascade do |t|
     t.string "state_type"
     t.string "state_name"
@@ -181,6 +254,15 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_25_075609) do
   add_foreign_key "areas", "cities", primary_key: "city_id"
   add_foreign_key "areas", "districts", column: "dist_id", primary_key: "dist_id"
   add_foreign_key "areas", "states", primary_key: "state_id"
+  add_foreign_key "business_cards", "areas", primary_key: "area_id"
+  add_foreign_key "business_cards", "business_categories"
+  add_foreign_key "business_cards", "business_seo_profiles"
+  add_foreign_key "business_cards", "business_sub_categories"
+  add_foreign_key "business_cards", "cities", primary_key: "city_id"
+  add_foreign_key "business_cards", "districts", primary_key: "dist_id"
+  add_foreign_key "business_cards", "social_media_profiles"
+  add_foreign_key "business_cards", "states", primary_key: "state_id"
+  add_foreign_key "business_sub_categories", "business_categories"
   add_foreign_key "cities", "districts", column: "dist_id", primary_key: "dist_id"
   add_foreign_key "cities", "states", primary_key: "state_id"
   add_foreign_key "districts", "states", primary_key: "state_id"

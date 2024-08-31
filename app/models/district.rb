@@ -2,6 +2,7 @@
 class District < ApplicationRecord
   belongs_to :state
   has_many :cities, foreign_key: :dist_id
+  has_many :business_cards, foreign_key: :district_id, primary_key: :dist_id
 
   validates :dist_id, presence: true, uniqueness: true
   validates :dist_name, presence: true

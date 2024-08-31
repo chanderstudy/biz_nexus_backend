@@ -3,6 +3,7 @@ class State < ApplicationRecord
   has_many :districts
   has_many :cities, through: :districts
   has_many :areas, through: :cities
+  has_many :business_cards, foreign_key: :state_id, primary_key: :state_id
 
   validates :state_id, presence: true, uniqueness: true
   validates :state_name, presence: true
