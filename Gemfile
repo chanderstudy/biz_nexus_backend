@@ -20,7 +20,11 @@ gem "jbuilder"
 gem "redis", ">= 4.0.1"
 
 gem 'activeadmin'
+gem 'activeadmin_addons'
+gem 'activeadmin-searchable_select'
+gem 'simple_calendar'
 gem 'sassc'
+gem "image_processing", ">= 1.2"
 
 # Plus integrations with:
 gem 'devise'

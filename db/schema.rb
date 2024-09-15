@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_08_31_151228) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_15_040648) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -26,6 +26,34 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_31_151228) do
     t.index ["author_type", "author_id"], name: "index_active_admin_comments_on_author"
     t.index ["namespace"], name: "index_active_admin_comments_on_namespace"
     t.index ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource"
+  end
+
+  create_table "active_storage_attachments", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "record_type", null: false
+    t.bigint "record_id", null: false
+    t.bigint "blob_id", null: false
+    t.datetime "created_at", null: false
+    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+  end
+
+  create_table "active_storage_blobs", force: :cascade do |t|
+    t.string "key", null: false
+    t.string "filename", null: false
+    t.string "content_type"
+    t.text "metadata"
+    t.string "service_name", null: false
+    t.bigint "byte_size", null: false
+    t.string "checksum"
+    t.datetime "created_at", null: false
+    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "active_storage_variant_records", force: :cascade do |t|
+    t.bigint "blob_id", null: false
+    t.string "variation_digest", null: false
+    t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
   create_table "admin_users", force: :cascade do |t|
@@ -69,6 +97,18 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_31_151228) do
     t.index ["state_id"], name: "index_areas_on_state_id"
   end
 
+  create_table "business_card_links", force: :cascade do |t|
+    t.bigint "business_card_id"
+    t.integer "type"
+    t.integer "priority"
+    t.string "title"
+    t.string "url"
+    t.integer "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["business_card_id"], name: "index_business_card_links_on_business_card_id"
+  end
+
   create_table "business_cards", force: :cascade do |t|
     t.string "name", limit: 128, null: false
     t.string "owner_name", limit: 128
@@ -82,7 +122,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_31_151228) do
     t.integer "bcard_power"
     t.bigint "business_category_id"
     t.bigint "business_sub_category_id"
-    t.integer "pstatus"
     t.integer "status"
     t.boolean "seo_active", default: false
     t.bigint "business_seo_profile_id"
@@ -99,12 +138,14 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_31_151228) do
     t.bigint "district_id"
     t.bigint "city_id"
     t.bigint "area_id"
+    t.bigint "portal_id"
     t.index ["area_id"], name: "index_business_cards_on_area_id"
     t.index ["business_category_id"], name: "index_business_cards_on_business_category_id"
     t.index ["business_seo_profile_id"], name: "index_business_cards_on_business_seo_profile_id"
     t.index ["business_sub_category_id"], name: "index_business_cards_on_business_sub_category_id"
     t.index ["city_id"], name: "index_business_cards_on_city_id"
     t.index ["district_id"], name: "index_business_cards_on_district_id"
+    t.index ["portal_id"], name: "index_business_cards_on_portal_id"
     t.index ["social_media_profile_id"], name: "index_business_cards_on_social_media_profile_id"
     t.index ["state_id"], name: "index_business_cards_on_state_id"
   end
@@ -164,6 +205,23 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_31_151228) do
     t.index ["state_id"], name: "index_cities_on_state_id"
   end
 
+  create_table "coupons", force: :cascade do |t|
+    t.integer "type"
+    t.integer "created_for"
+    t.string "name"
+    t.string "code"
+    t.integer "percentage"
+    t.integer "fix_discount"
+    t.integer "max_discount"
+    t.datetime "start_date"
+    t.datetime "end_date"
+    t.string "description"
+    t.integer "priority"
+    t.integer "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "districts", primary_key: "dist_id", force: :cascade do |t|
     t.integer "state_id", null: false
     t.string "dist_cd"
@@ -194,6 +252,38 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_31_151228) do
     t.datetime "updated_at", null: false
     t.index ["dist_id"], name: "index_districts_on_dist_id", unique: true
     t.index ["state_id"], name: "index_districts_on_state_id"
+  end
+
+  create_table "documents", force: :cascade do |t|
+    t.string "title"
+    t.string "document_type"
+    t.integer "status"
+    t.integer "priority"
+    t.string "documentable_type", null: false
+    t.bigint "documentable_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["documentable_type", "documentable_id"], name: "index_documents_on_documentable"
+  end
+
+  create_table "faqs", force: :cascade do |t|
+    t.string "question", null: false
+    t.text "answer", null: false
+    t.string "faqable_type"
+    t.bigint "faqable_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["faqable_type", "faqable_id"], name: "index_faqs_on_faqable"
+  end
+
+  create_table "portals", force: :cascade do |t|
+    t.string "portal_name"
+    t.string "portal_remark"
+    t.string "portal_url"
+    t.string "portal_msg"
+    t.integer "portal_status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "roles", force: :cascade do |t|
@@ -238,6 +328,28 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_31_151228) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "subscriptions", force: :cascade do |t|
+    t.string "name"
+    t.float "price"
+    t.integer "duration"
+    t.string "description"
+    t.integer "priority"
+    t.integer "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "transactions", force: :cascade do |t|
+    t.integer "payment_mode"
+    t.string "payment_id"
+    t.integer "amount"
+    t.integer "status"
+    t.string "remarks"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["payment_id"], name: "index_transactions_on_payment_id", unique: true
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -250,10 +362,13 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_31_151228) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "admin_users", "roles"
   add_foreign_key "areas", "cities", primary_key: "city_id"
   add_foreign_key "areas", "districts", column: "dist_id", primary_key: "dist_id"
   add_foreign_key "areas", "states", primary_key: "state_id"
+  add_foreign_key "business_card_links", "business_cards"
   add_foreign_key "business_cards", "areas", primary_key: "area_id"
   add_foreign_key "business_cards", "business_categories"
   add_foreign_key "business_cards", "business_seo_profiles"

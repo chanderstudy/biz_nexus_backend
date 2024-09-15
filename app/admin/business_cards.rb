@@ -3,9 +3,9 @@ ActiveAdmin.register BusinessCard do
   menu parent: "Manage Business Card"
   permit_params :name, :owner_name, :email, :address, :landmark, :mobile, :latitude, :longitude,
                 :bcard_type, :bcard_power, :business_category_id, :business_sub_category_id,
-                :pstatus, :status, :seo_active, :business_seo_profile_id, :social_media_profile_id,
+                :status, :seo_active, :business_seo_profile_id, :social_media_profile_id,
                 :website, :bank_account, :bank_ifsc, :bank_type, :qrcode_active, :qrcode_file,
-                :state_id, :district_id, :city_id, :area_id
+                :state_id, :district_id, :city_id, :area_id, :portal_id
 
   # Customize the index page
   index do
@@ -23,7 +23,6 @@ ActiveAdmin.register BusinessCard do
     column :bcard_power
     column :business_category
     column :business_sub_category
-    column :pstatus
     column :status
     column :seo_active
     column :business_seo_profile
@@ -34,6 +33,7 @@ ActiveAdmin.register BusinessCard do
     column :bank_type
     column :qrcode_active
     column :qrcode_file
+    column :portal
     column :state
     column :district
     column :city
@@ -56,7 +56,6 @@ ActiveAdmin.register BusinessCard do
       f.input :bcard_power
       f.input :business_category
       f.input :business_sub_category
-      f.input :pstatus
       f.input :status
       f.input :seo_active
       f.input :business_seo_profile
@@ -67,10 +66,11 @@ ActiveAdmin.register BusinessCard do
       f.input :bank_type
       f.input :qrcode_active
       f.input :qrcode_file
-      f.input :state
-      f.input :district
-      f.input :city
-      f.input :area
+      f.input(:state, as: :searchable_select, fields: [:state_name], display_name: 'state_name')
+      f.input :district, as: :search_select, fields: [:dist_name], display_name: 'dist_name'
+      f.input :city, as: :search_select, fields: [:city_name], display_name: 'city_name'
+      f.input :area, as: :search_select, fields: [:area_name], display_name: 'area_name'
+      f.input :portal, as: :search_select, fields: [:portal_name], display_name: 'portal_name'
     end
     f.actions
   end

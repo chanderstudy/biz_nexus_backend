@@ -10,6 +10,15 @@ class BusinessCard < ApplicationRecord
   belongs_to :business_sub_category
   belongs_to :business_seo_profile
   belongs_to :social_media_profile
+  belongs_to :portal
+  has_many :faqs, as: :faqable
+  has_many :documents, as: :documentable, dependent: :destroy
+
+  BCARD_TYPES = %w(free, paid).freeze
+  # enum bcard_type: %i[form email text phone]
+  enum bcard_type: %i[free paid]
+  enum status: %i[deactivate active]
+  enum bank_type: %i[saving current]
 
   validates :name, presence: true, length: { maximum: 128 }
 

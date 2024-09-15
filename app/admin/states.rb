@@ -11,6 +11,11 @@ ActiveAdmin.register State do
   filter :district
   filter :area
 
+  collection_action :autocomplete, method: :get do
+    states = State.ransack(name_cont: params[:q]).result(distinct: true)
+    render json: { results: states.map { |state| { id: state.id, text: state.name } } }
+  end
+
   index do
     selectable_column
     id_column

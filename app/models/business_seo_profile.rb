@@ -1,6 +1,7 @@
 # app/models/business_seo_profiles.rb
 class BusinessSeoProfile < ApplicationRecord
   has_many :business_cards
+  has_many_attached :images
 
   # Validations
   validates :active, inclusion: { in: [true, false] }
