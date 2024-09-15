@@ -1,7 +1,7 @@
 ActiveAdmin.register Faq do
   # Define permitted parameters for strong parameters
   permit_params :question, :answer, :faqable_id, :faqable_type
-
+  menu parent: "Miscellaneous"
   # Index view configuration
   index do
     selectable_column

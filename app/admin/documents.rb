@@ -1,6 +1,7 @@
 ActiveAdmin.register Document do
   permit_params :title, :document_type, :status, :file, :documentable_type, :documentable_id
   config.filters = false
+  menu parent: "Miscellaneous"
 
   form do |f|
     f.inputs "Document Details" do

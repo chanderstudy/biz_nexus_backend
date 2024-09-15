@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_15_040648) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_15_062605) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -276,6 +276,48 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_15_040648) do
     t.index ["faqable_type", "faqable_id"], name: "index_faqs_on_faqable"
   end
 
+  create_table "orders", force: :cascade do |t|
+    t.string "order_invoice"
+    t.bigint "agent_id"
+    t.bigint "user_id"
+    t.bigint "placed_by_id"
+    t.bigint "plan_id"
+    t.text "description"
+    t.integer "mrp"
+    t.jsonb "coupon"
+    t.integer "discount"
+    t.string "extra_charge_details"
+    t.integer "extra_charge"
+    t.integer "gst"
+    t.integer "net_amount"
+    t.bigint "transaction_id"
+    t.bigint "payment_received_by_id"
+    t.bigint "subscription_id"
+    t.string "order_remark"
+    t.integer "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["agent_id"], name: "index_orders_on_agent_id"
+    t.index ["payment_received_by_id"], name: "index_orders_on_payment_received_by_id"
+    t.index ["placed_by_id"], name: "index_orders_on_placed_by_id"
+    t.index ["plan_id"], name: "index_orders_on_plan_id"
+    t.index ["subscription_id"], name: "index_orders_on_subscription_id"
+    t.index ["transaction_id"], name: "index_orders_on_transaction_id"
+    t.index ["user_id"], name: "index_orders_on_user_id"
+  end
+
+  create_table "plans", force: :cascade do |t|
+    t.string "name"
+    t.integer "price"
+    t.integer "discount"
+    t.integer "duration"
+    t.string "description"
+    t.integer "priority"
+    t.integer "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "portals", force: :cascade do |t|
     t.string "portal_name"
     t.string "portal_remark"
@@ -329,11 +371,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_15_040648) do
   end
 
   create_table "subscriptions", force: :cascade do |t|
-    t.string "name"
-    t.float "price"
-    t.integer "duration"
-    t.string "description"
-    t.integer "priority"
+    t.datetime "start_date"
+    t.datetime "end_date"
     t.integer "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -381,4 +420,11 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_15_040648) do
   add_foreign_key "cities", "districts", column: "dist_id", primary_key: "dist_id"
   add_foreign_key "cities", "states", primary_key: "state_id"
   add_foreign_key "districts", "states", primary_key: "state_id"
+  add_foreign_key "orders", "plans"
+  add_foreign_key "orders", "subscriptions"
+  add_foreign_key "orders", "transactions"
+  add_foreign_key "orders", "users"
+  add_foreign_key "orders", "users", column: "agent_id"
+  add_foreign_key "orders", "users", column: "payment_received_by_id"
+  add_foreign_key "orders", "users", column: "placed_by_id"
 end

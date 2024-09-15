@@ -3,6 +3,7 @@ ActiveAdmin.register Portal do
 
   permit_params :portal_name, :portal_remark, :portal_url, :portal_msg, :portal_status
   filter :portal_name
+  menu parent: "Miscellaneous"
 
   # Index view configuration
   index do

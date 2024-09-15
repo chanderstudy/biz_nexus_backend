@@ -18,6 +18,6 @@ class Ability
     # elsif user.role?(:viewer)
     #   # Viewers can only read articles
     #   can :read, Article
-    end
+    # end
   end
 end

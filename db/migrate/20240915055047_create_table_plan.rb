@@ -1,8 +1,9 @@
-class CreateTableSubscription < ActiveRecord::Migration[7.2]
+class CreateTablePlan < ActiveRecord::Migration[7.2]
   def change
-    create_table :subscriptions do |t|
+    create_table :plans do |t|
       t.string :name
-      t.float :price
+      t.integer :price
+      t.integer :discount
       t.integer :duration
       t.string :description
       t.integer :priority
@@ -12,4 +13,3 @@ class CreateTableSubscription < ActiveRecord::Migration[7.2]
     end
   end
 end
-

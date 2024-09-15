@@ -1,7 +1,7 @@
 ActiveAdmin.register Transaction do
   permit_params :payment_mode, :payment_id, :amount, :status, :remarks
   config.filters = false
-
+  menu parent: "Orders & Payments"
   index do
     selectable_column
     id_column

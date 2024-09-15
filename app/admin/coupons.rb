@@ -1,6 +1,7 @@
 ActiveAdmin.register Coupon do
   permit_params :type, :created_for, :name, :code, :percentage, :fix_discount, :max_discount, :start_date, :end_date, :description, :logo, :priority, :status
   config.filters = false
+  menu parent: "Subscription Plans"
   index do
     selectable_column
     id_column

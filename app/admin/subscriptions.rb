@@ -1,28 +1,22 @@
 ActiveAdmin.register Subscription do
-  # Permit the parameters
-  permit_params :name, :price, :discount, :duration, :description, :logo, :banner, :priority, :status
+  permit_params :start_date, :end_date, :status  
   config.filters = false
+  menu parent: "Subscription Plans"
+
   index do
     selectable_column
     id_column
-    column :name
-    column :price
-    column :duration
-    column :priority
+    column :start_date
+    column :end_date
     column :status
     actions
   end
 
 
   form do |f|
-    f.inputs 'Subscription Details' do
-      f.input :name
-      f.input :price
-      f.input :duration
-      f.input :description
-      f.input :logo, as: :file
-      f.input :banner, as: :file
-      f.input :priority
+    f.inputs 'Plan Details' do
+      f.input :start_date
+      f.input :end_date
       f.input :status
     end
     f.actions
@@ -30,13 +24,8 @@ ActiveAdmin.register Subscription do
 
   show do
     attributes_table do
-      row :name
-      row :price
-      row :duration
-      row :description
-      row :logo
-      row :banner
-      row :priority
+      row :start_date
+      row :end_date
       row :status
       row :created_at
       row :updated_at
