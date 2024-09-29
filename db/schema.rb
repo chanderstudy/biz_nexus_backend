@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_15_062605) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_29_162906) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -65,6 +65,27 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_15_062605) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "role_id"
+    t.string "name"
+    t.string "mobile"
+    t.string "sex"
+    t.string "blood_group"
+    t.string "aadhar_card", limit: 12
+    t.string "pan_card", limit: 10
+    t.string "gst_number", limit: 15
+    t.string "address"
+    t.string "landmark"
+    t.string "qualification"
+    t.bigint "pincode"
+    t.datetime "dob"
+    t.datetime "dom"
+    t.bigint "added_by"
+    t.bigint "portal_id"
+    t.integer "continent_id"
+    t.integer "country_id"
+    t.integer "state_id"
+    t.integer "dist_id"
+    t.integer "city_id"
+    t.string "area_id"
     t.index ["email"], name: "index_admin_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true
     t.index ["role_id"], name: "index_admin_users_on_role_id"
@@ -80,17 +101,16 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_15_062605) do
     t.string "area_map"
     t.integer "area_star"
     t.string "crime_level"
-    t.string "area_status"
     t.string "area_logi"
     t.float "area_lati"
     t.string "area_type"
     t.string "area_pin"
-    t.string "area_seo_kword"
-    t.string "area_seo_mtag"
-    t.text "area_seo_data"
-    t.string "area_p_status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "area_slug"
+    t.string "area_post_office"
+    t.string "video_url"
+    t.boolean "publish", default: true
     t.index ["area_id"], name: "index_areas_on_area_id", unique: true
     t.index ["city_id"], name: "index_areas_on_city_id"
     t.index ["dist_id"], name: "index_areas_on_dist_id"
@@ -124,8 +144,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_15_062605) do
     t.bigint "business_sub_category_id"
     t.integer "status"
     t.boolean "seo_active", default: false
-    t.bigint "business_seo_profile_id"
-    t.bigint "social_media_profile_id"
     t.string "website", limit: 94
     t.string "bank_account", limit: 15
     t.string "bank_ifsc"
@@ -139,14 +157,36 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_15_062605) do
     t.bigint "city_id"
     t.bigint "area_id"
     t.bigint "portal_id"
+    t.string "description"
+    t.string "owner_designation"
+    t.string "work_phone_number"
+    t.date "established_date"
+    t.bigint "created_by"
+    t.bigint "managed_by"
+    t.string "short_url"
+    t.boolean "published", default: false
+    t.string "promotion_type"
+    t.bigint "plan_id"
+    t.boolean "qr_publish", default: false
+    t.string "bank_name"
+    t.boolean "legal_publish", default: false
+    t.string "business_pan_card"
+    t.string "gst_number"
+    t.boolean "service_publish", default: false
+    t.boolean "catalog_publish", default: false
+    t.boolean "social_media_publish", default: false
+    t.boolean "photo_gallery_publish", default: false
+    t.boolean "video_gallery_publish", default: false
+    t.boolean "feedback_publish", default: false
+    t.boolean "enquiry_publish", default: false
+    t.boolean "external_portal_publish", default: false
+    t.text "achivement"
     t.index ["area_id"], name: "index_business_cards_on_area_id"
     t.index ["business_category_id"], name: "index_business_cards_on_business_category_id"
-    t.index ["business_seo_profile_id"], name: "index_business_cards_on_business_seo_profile_id"
     t.index ["business_sub_category_id"], name: "index_business_cards_on_business_sub_category_id"
     t.index ["city_id"], name: "index_business_cards_on_city_id"
     t.index ["district_id"], name: "index_business_cards_on_district_id"
     t.index ["portal_id"], name: "index_business_cards_on_portal_id"
-    t.index ["social_media_profile_id"], name: "index_business_cards_on_social_media_profile_id"
     t.index ["state_id"], name: "index_business_cards_on_state_id"
   end
 
@@ -154,6 +194,12 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_15_062605) do
     t.string "name", limit: 128
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "description"
+    t.string "code"
+    t.string "slug"
+    t.integer "priority"
+    t.boolean "publish"
+    t.string "category_type"
   end
 
   create_table "business_seo_profiles", force: :cascade do |t|
@@ -163,6 +209,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_15_062605) do
     t.string "description", limit: 256
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "business_card_id"
+    t.index ["business_card_id"], name: "index_business_seo_profiles_on_business_card_id"
   end
 
   create_table "business_sub_categories", force: :cascade do |t|
@@ -170,6 +218,11 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_15_062605) do
     t.string "name", limit: 128
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "description"
+    t.string "code"
+    t.string "slug"
+    t.integer "priority"
+    t.boolean "publish"
     t.index ["business_category_id"], name: "index_business_sub_categories_on_business_category_id"
   end
 
@@ -184,9 +237,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_15_062605) do
     t.float "city_lati"
     t.string "city_reach_img"
     t.string "city_map"
-    t.string "city_seo_kword"
-    t.string "city_seo_mtag"
-    t.text "city_seo_data"
     t.integer "city_pop11"
     t.float "city_area"
     t.float "city_density"
@@ -196,13 +246,65 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_15_062605) do
     t.string "city_smart"
     t.string "crime_level"
     t.integer "sdist_id"
-    t.string "city_p_status"
-    t.string "city_status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "video_url"
+    t.string "city_slug"
+    t.boolean "publish", default: true
     t.index ["city_id"], name: "index_cities_on_city_id", unique: true
     t.index ["dist_id"], name: "index_cities_on_dist_id"
     t.index ["state_id"], name: "index_cities_on_state_id"
+  end
+
+  create_table "continents", force: :cascade do |t|
+    t.string "name", limit: 64
+    t.text "detail"
+    t.string "population", limit: 15
+    t.string "area_land", limit: 15
+    t.string "area_density", limit: 10
+    t.string "population_share", limit: 4
+    t.string "photo", limit: 64
+    t.string "video_url", limit: 256
+    t.string "map", limit: 64
+    t.string "slug", limit: 128
+    t.integer "publish", limit: 2
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "countries", force: :cascade do |t|
+    t.integer "continent_id"
+    t.string "sub_continent"
+    t.string "sovereignty"
+    t.string "economy_type"
+    t.string "name"
+    t.text "country_detail"
+    t.string "iso3"
+    t.string "iso2"
+    t.string "population"
+    t.string "area_land"
+    t.string "area_density"
+    t.integer "numeric_code"
+    t.integer "phone_code"
+    t.string "capital"
+    t.string "currency_name"
+    t.string "currency_code"
+    t.string "currency_symbol"
+    t.string "tld"
+    t.string "timezones"
+    t.string "latitude"
+    t.string "longitude"
+    t.string "nationality"
+    t.string "photo"
+    t.string "official_map"
+    t.string "estd_date"
+    t.string "official_web_url"
+    t.integer "official_lang1"
+    t.integer "official_lang2"
+    t.string "slug"
+    t.integer "publish"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "coupons", force: :cascade do |t|
@@ -238,18 +340,15 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_15_062605) do
     t.float "dist_lati"
     t.string "dist_reach_img"
     t.string "dist_map"
-    t.integer "estd_dd"
-    t.integer "estd_mm"
-    t.integer "estd_yy"
-    t.string "dist_seo_kword"
-    t.string "dist_seo_mtag"
-    t.text "dist_seo_data"
     t.string "dist_block"
     t.string "dist_sdist"
     t.string "dist_p_status"
     t.string "dist_status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "video_url"
+    t.string "web_url"
+    t.datetime "established_date"
     t.index ["dist_id"], name: "index_districts_on_dist_id", unique: true
     t.index ["state_id"], name: "index_districts_on_state_id"
   end
@@ -342,6 +441,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_15_062605) do
     t.string "other", limit: 15
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "business_card_id"
+    t.index ["business_card_id"], name: "index_social_media_profiles_on_business_card_id"
   end
 
   create_table "states", primary_key: "state_id", force: :cascade do |t|
@@ -368,6 +469,14 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_15_062605) do
     t.string "state_dist"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "country_id"
+    t.string "state_slug"
+    t.string "population"
+    t.string "area_land"
+    t.string "area_density"
+    t.boolean "publish", default: false
+    t.string "video_url"
+    t.index ["country_id"], name: "index_states_on_country_id"
   end
 
   create_table "subscriptions", force: :cascade do |t|
@@ -397,25 +506,51 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_15_062605) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "name"
+    t.string "mobile"
+    t.string "sex"
+    t.string "blood_group"
+    t.string "address"
+    t.string "landmark"
+    t.string "qualification"
+    t.datetime "dob"
+    t.datetime "dom"
+    t.boolean "status", default: false
+    t.bigint "portal_id"
+    t.integer "continent_id"
+    t.integer "country_id"
+    t.integer "state_id"
+    t.integer "dist_id"
+    t.integer "city_id"
+    t.string "area_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "admin_users", "admin_users", column: "added_by"
+  add_foreign_key "admin_users", "cities", primary_key: "city_id"
+  add_foreign_key "admin_users", "continents"
+  add_foreign_key "admin_users", "countries"
+  add_foreign_key "admin_users", "districts", column: "dist_id", primary_key: "dist_id"
+  add_foreign_key "admin_users", "portals"
   add_foreign_key "admin_users", "roles"
+  add_foreign_key "admin_users", "states", primary_key: "state_id"
   add_foreign_key "areas", "cities", primary_key: "city_id"
   add_foreign_key "areas", "districts", column: "dist_id", primary_key: "dist_id"
   add_foreign_key "areas", "states", primary_key: "state_id"
   add_foreign_key "business_card_links", "business_cards"
+  add_foreign_key "business_cards", "admin_users", column: "created_by"
+  add_foreign_key "business_cards", "admin_users", column: "managed_by"
   add_foreign_key "business_cards", "areas", primary_key: "area_id"
   add_foreign_key "business_cards", "business_categories"
-  add_foreign_key "business_cards", "business_seo_profiles"
   add_foreign_key "business_cards", "business_sub_categories"
   add_foreign_key "business_cards", "cities", primary_key: "city_id"
   add_foreign_key "business_cards", "districts", primary_key: "dist_id"
-  add_foreign_key "business_cards", "social_media_profiles"
+  add_foreign_key "business_cards", "plans"
   add_foreign_key "business_cards", "states", primary_key: "state_id"
+  add_foreign_key "business_seo_profiles", "business_cards"
   add_foreign_key "business_sub_categories", "business_categories"
   add_foreign_key "cities", "districts", column: "dist_id", primary_key: "dist_id"
   add_foreign_key "cities", "states", primary_key: "state_id"
@@ -427,4 +562,12 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_15_062605) do
   add_foreign_key "orders", "users", column: "agent_id"
   add_foreign_key "orders", "users", column: "payment_received_by_id"
   add_foreign_key "orders", "users", column: "placed_by_id"
+  add_foreign_key "social_media_profiles", "business_cards"
+  add_foreign_key "states", "countries"
+  add_foreign_key "users", "cities", primary_key: "city_id"
+  add_foreign_key "users", "continents"
+  add_foreign_key "users", "countries"
+  add_foreign_key "users", "districts", column: "dist_id", primary_key: "dist_id"
+  add_foreign_key "users", "portals"
+  add_foreign_key "users", "states", primary_key: "state_id"
 end

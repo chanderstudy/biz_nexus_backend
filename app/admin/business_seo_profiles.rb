@@ -45,6 +45,7 @@ ActiveAdmin.register BusinessSeoProfile do
         end
       end
     end
+    active_admin_comments
   end
 
   # Add filters if necessary
