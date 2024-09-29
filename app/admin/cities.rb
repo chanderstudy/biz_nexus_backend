@@ -1,10 +1,12 @@
 # app/admin/city.rb
 ActiveAdmin.register City do
   menu parent: "Geographical Units"
-  permit_params :city_id, :dist_id, :state_id, :city_name, :city_detail, :city_lang1, :city_lang2,
-                :city_logi, :city_lati, :city_reach_img, :city_map, :city_seo_kword, :city_seo_mtag,
-                :city_seo_data, :city_pop11, :city_area, :city_density, :city_star, :city_type,
-                :city_tier, :city_smart, :crime_level, :sdist_id, :city_p_status, :city_status
+  permit_params :city_id, :dist_id, :state_id, :city_name, :city_detail, 
+                :city_lang1, :city_lang2, :city_logi, :city_lati, 
+                :city_reach_img, :city_map, :video_url, :city_slug, 
+                :city_pop11, :city_area, :city_density, :city_star, 
+                :city_type, :city_tier, :city_smart, :crime_level, 
+                :sdist_id, :publish
 
   filter :city_name
   filter :state
@@ -30,9 +32,8 @@ ActiveAdmin.register City do
     column :city_lati
     column :city_reach_img
     column :city_map
-    column :city_seo_kword
-    column :city_seo_mtag
-    column :city_seo_data
+    column :video_url
+    column :city_slug
     column :city_pop11
     column :city_area
     column :city_density
@@ -42,8 +43,7 @@ ActiveAdmin.register City do
     column :city_smart
     column :crime_level
     column :sdist_id
-    column :city_p_status
-    column :city_status
+    column :publish
     actions
   end
 
@@ -60,9 +60,8 @@ ActiveAdmin.register City do
       f.input :city_lati
       f.input :city_reach_img
       f.input :city_map
-      f.input :city_seo_kword
-      f.input :city_seo_mtag
-      f.input :city_seo_data
+      f.input :video_url
+      f.input :city_slug
       f.input :city_pop11
       f.input :city_area
       f.input :city_density
@@ -72,8 +71,7 @@ ActiveAdmin.register City do
       f.input :city_smart
       f.input :crime_level
       f.input :sdist_id
-      f.input :city_p_status
-      f.input :city_status
+      f.input :publish
     end
     f.actions
   end

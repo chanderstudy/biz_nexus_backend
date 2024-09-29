@@ -1,4 +1,11 @@
 class User < ApplicationRecord
+  belongs_to :portal, optional: true
+  belongs_to :continent, optional: true
+  belongs_to :country, optional: true
+  belongs_to :state, foreign_key: :state_id, primary_key: :state_id, optional: true
+  belongs_to :district, foreign_key: :dist_id, primary_key: :dist_id, optional: true
+  belongs_to :city, foreign_key: :city_id, primary_key: :city_id, optional: true
+  belongs_to :area, foreign_key: :area_id, primary_key: :area_id, optional: true
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, 
@@ -10,5 +17,9 @@ class User < ApplicationRecord
 
   def self.ransackable_attributes(auth_object = nil)
     ["created_at", "email", "id", "updated_at"]
+  end
+
+  def self.ransackable_associations(auth_object = nil)
+    ["area", "city", "continent", "country", "district", "orders", "orders_as_agent", "placed_orders", "portal", "state"]
   end
 end

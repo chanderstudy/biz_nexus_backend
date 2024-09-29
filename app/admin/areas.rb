@@ -1,9 +1,8 @@
-# app/admin/area.rb
 ActiveAdmin.register Area do
   menu parent: "Geographical Units"
   permit_params :area_id, :city_id, :dist_id, :state_id, :area_name, :area_detail, :area_reach_img,
-                :area_map, :area_star, :crime_level, :area_status, :area_logi, :area_lati,
-                :area_type, :area_pin, :area_seo_kword, :area_seo_mtag, :area_seo_data, :area_p_status
+                :area_map, :area_star, :crime_level, :area_logi, :area_lati,
+                :area_type, :area_pin, :area_slug, :area_post_office, :video_url, :publish
 
   filter :area_name
   filter :state
@@ -23,15 +22,14 @@ ActiveAdmin.register Area do
     column :area_map
     column :area_star
     column :crime_level
-    column :area_status
     column :area_logi
     column :area_lati
     column :area_type
     column :area_pin
-    column :area_seo_kword
-    column :area_seo_mtag
-    column :area_seo_data
-    column :area_p_status
+    column :area_slug
+    column :area_post_office
+    column :video_url
+    column :publish
     actions
   end
 
@@ -47,15 +45,14 @@ ActiveAdmin.register Area do
       f.input :area_map
       f.input :area_star
       f.input :crime_level
-      f.input :area_status
       f.input :area_logi
       f.input :area_lati
       f.input :area_type
       f.input :area_pin
-      f.input :area_seo_kword
-      f.input :area_seo_mtag
-      f.input :area_seo_data
-      f.input :area_p_status
+      f.input :area_slug
+      f.input :area_post_office
+      f.input :video_url
+      f.input :publish
     end
     f.actions
   end

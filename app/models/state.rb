@@ -1,5 +1,6 @@
 # app/models/state.rb
 class State < ApplicationRecord
+  belongs_to :country
   has_many :districts
   has_many :cities, through: :districts
   has_many :areas, through: :cities

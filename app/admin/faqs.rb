@@ -37,7 +37,7 @@ ActiveAdmin.register Faq do
       f.input :answer
       f.input :faqable_type, as: :select, collection: ['BusinessCard', 'Product']
       # `faqable_id` will be handled through another mechanism or JavaScript
-      f.input :faqable_id, as: :select, collection: []
+      f.input :faqable_id#, as: :select, collection: []
     end
     f.actions
   end

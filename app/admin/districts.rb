@@ -3,12 +3,14 @@ ActiveAdmin.register District do
   menu parent: "Geographical Units"
   permit_params :dist_id, :state_id, :dist_cd, :dist_name, :dist_hq, :dist_detail, :dist_pop11,
                 :dist_area, :dist_density, :dist_web, :dist_lang1, :dist_lang2, :dist_logi,
-                :dist_lati, :dist_reach_img, :dist_map, :estd_dd, :estd_mm, :estd_yy, :dist_seo_kword,
-                :dist_seo_mtag, :dist_seo_data, :dist_block, :dist_sdist, :dist_p_status, :dist_status
+                :dist_lati, :dist_reach_img, :dist_map, :video_url, :web_url, :established_date,
+                :dist_block, :dist_sdist, :dist_p_status, :dist_status
+  
   filter :dist_name
   filter :state
-  filter :city
-  filter :area
+  # You might want to add city and area filters if applicable
+  # filter :city
+  # filter :area
 
   index do
     selectable_column
@@ -29,12 +31,9 @@ ActiveAdmin.register District do
     column :dist_lati
     column :dist_reach_img
     column :dist_map
-    column :estd_dd
-    column :estd_mm
-    column :estd_yy
-    column :dist_seo_kword
-    column :dist_seo_mtag
-    column :dist_seo_data
+    column :video_url
+    column :web_url
+    column :established_date
     column :dist_block
     column :dist_sdist
     column :dist_p_status
@@ -60,12 +59,9 @@ ActiveAdmin.register District do
       f.input :dist_lati
       f.input :dist_reach_img
       f.input :dist_map
-      f.input :estd_dd
-      f.input :estd_mm
-      f.input :estd_yy
-      f.input :dist_seo_kword
-      f.input :dist_seo_mtag
-      f.input :dist_seo_data
+      f.input :video_url
+      f.input :web_url
+      f.input :established_date, as: :datetime_picker  # Adjust as needed based on your setup
       f.input :dist_block
       f.input :dist_sdist
       f.input :dist_p_status

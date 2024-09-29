@@ -1,19 +1,24 @@
-# app/admin/state.rb
 ActiveAdmin.register State do
   menu parent: "Geographical Units"
+  
+  # Allow parameters for mass assignment
   permit_params :state_id, :state_code, :state_name, :state_hq, :state_detail, :state_pop11,
-                :state_area, :state_density, :state_web, :state_lang1, :state_lang2, :state_logi,
-                :state_lati, :state_reach_img, :state_map, :estd_dd, :estd_mm, :estd_yy,
-                :state_seo_kword, :state_seo_mtag, :state_seo_data, :state_block, :state_sdist,
-                :state_p_status, :state_status
+                :state_area, :state_density, :state_web, :state_lang1, :state_lang2, 
+                :state_logi, :state_lati, :state_reach_img, :state_map, :estd_dd, 
+                :estd_mm, :estd_yy, :state_seo_kword, :state_seo_mtag, :state_seo_data, 
+                :state_block, :state_sdist, :state_p_status, :state_status,
+                :state_slug, :population, :area_land, :area_density, :publish, :video_url
+
+  # Filters for the index page
   filter :state_name
   filter :city
   filter :district
   filter :area
 
+
   collection_action :autocomplete, method: :get do
-    states = State.ransack(name_cont: params[:q]).result(distinct: true)
-    render json: { results: states.map { |state| { id: state.id, text: state.name } } }
+    states = State.ransack(state_name_cont: params[:q]).result(distinct: true)
+    render json: { results: states.map { |state| { id: state.id, text: state.state_name } } }
   end
 
   index do
@@ -44,6 +49,12 @@ ActiveAdmin.register State do
     column :state_sdist
     column :state_p_status
     column :state_status
+    column :state_slug
+    column :population
+    column :area_land
+    column :area_density
+    column :publish
+    column :video_url
     actions
   end
 
@@ -74,6 +85,12 @@ ActiveAdmin.register State do
       f.input :state_sdist
       f.input :state_p_status
       f.input :state_status
+      f.input :state_slug
+      f.input :population
+      f.input :area_land
+      f.input :area_density
+      f.input :publish
+      f.input :video_url
     end
     f.actions
   end

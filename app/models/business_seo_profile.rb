@@ -1,6 +1,6 @@
 # app/models/business_seo_profiles.rb
 class BusinessSeoProfile < ApplicationRecord
-  has_many :business_cards
+  has_one :business_card
   has_many_attached :images
 
   # Validations
