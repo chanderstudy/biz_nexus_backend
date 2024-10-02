@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_02_100044) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_02_173745) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -141,14 +141,11 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_02_100044) do
     t.integer "bcard_type"
     t.integer "bcard_power"
     t.bigint "business_sub_category_id"
-    t.integer "status"
     t.boolean "seo_active", default: false
     t.string "website", limit: 94
     t.string "bank_account", limit: 15
     t.string "bank_ifsc"
     t.integer "bank_type"
-    t.boolean "qrcode_active", default: false
-    t.string "qrcode_file", limit: 128
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "state_id"
@@ -160,8 +157,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_02_100044) do
     t.string "owner_designation"
     t.string "work_phone_number"
     t.date "established_date"
-    t.bigint "created_by"
-    t.bigint "managed_by"
+    t.bigint "created_by_id"
+    t.bigint "managed_by_id"
     t.string "short_url"
     t.boolean "published", default: false
     t.string "promotion_type"
@@ -180,10 +177,19 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_02_100044) do
     t.boolean "enquiry_publish", default: false
     t.boolean "external_portal_publish", default: false
     t.text "achivement"
+    t.boolean "achivement_publish"
+    t.boolean "certificate_publish"
+    t.boolean "short_url_publish"
+    t.bigint "country_id"
+    t.bigint "continent_id"
+    t.bigint "owned_by_id"
     t.index ["area_id"], name: "index_business_cards_on_area_id"
     t.index ["business_sub_category_id"], name: "index_business_cards_on_business_sub_category_id"
     t.index ["city_id"], name: "index_business_cards_on_city_id"
+    t.index ["continent_id"], name: "index_business_cards_on_continent_id"
+    t.index ["country_id"], name: "index_business_cards_on_country_id"
     t.index ["district_id"], name: "index_business_cards_on_district_id"
+    t.index ["owned_by_id"], name: "index_business_cards_on_owned_by_id"
     t.index ["portal_id"], name: "index_business_cards_on_portal_id"
     t.index ["state_id"], name: "index_business_cards_on_state_id"
   end
@@ -207,8 +213,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_02_100044) do
     t.string "description", limit: 256
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "business_card_id"
-    t.index ["business_card_id"], name: "index_business_seo_profiles_on_business_card_id"
+    t.string "seoprofileable_type"
+    t.bigint "seoprofileable_id"
+    t.index ["seoprofileable_type", "seoprofileable_id"], name: "index_business_seo_profiles_on_seoprofileable"
   end
 
   create_table "business_sub_categories", force: :cascade do |t|
@@ -530,15 +537,17 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_02_100044) do
   add_foreign_key "areas", "districts", column: "dist_id", primary_key: "dist_id"
   add_foreign_key "areas", "states", primary_key: "state_id"
   add_foreign_key "business_card_links", "business_cards"
-  add_foreign_key "business_cards", "admin_users", column: "created_by"
-  add_foreign_key "business_cards", "admin_users", column: "managed_by"
+  add_foreign_key "business_cards", "admin_users", column: "created_by_id"
+  add_foreign_key "business_cards", "admin_users", column: "managed_by_id"
   add_foreign_key "business_cards", "areas", primary_key: "area_id"
   add_foreign_key "business_cards", "business_sub_categories"
   add_foreign_key "business_cards", "cities", primary_key: "city_id"
+  add_foreign_key "business_cards", "continents"
+  add_foreign_key "business_cards", "countries"
   add_foreign_key "business_cards", "districts", primary_key: "dist_id"
   add_foreign_key "business_cards", "plans"
   add_foreign_key "business_cards", "states", primary_key: "state_id"
-  add_foreign_key "business_seo_profiles", "business_cards"
+  add_foreign_key "business_cards", "users", column: "owned_by_id"
   add_foreign_key "cities", "districts", column: "dist_id", primary_key: "dist_id"
   add_foreign_key "cities", "states", primary_key: "state_id"
   add_foreign_key "districts", "states", primary_key: "state_id"

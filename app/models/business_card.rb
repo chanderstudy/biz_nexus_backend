@@ -1,23 +1,24 @@
 class BusinessCard < ApplicationRecord
-  # Associations for location
+  belongs_to :continent
+  belongs_to :country
   belongs_to :state, foreign_key: :state_id, primary_key: :state_id
   belongs_to :district, foreign_key: :district_id, primary_key: :dist_id
   belongs_to :city, foreign_key: :city_id, primary_key: :city_id
   belongs_to :area, foreign_key: :area_id, primary_key: :area_id
   belongs_to :business_sub_category
   belongs_to :portal
-
-  has_one :business_seo_profile, dependent: :destroy  # Added dependent destroy
-  has_one :social_media_profile, dependent: :destroy  # Added dependent destroy
-  has_many :faqs, as: :faqable, dependent: :destroy  # Ensure FAQs are destroyed
-  has_many :documents, as: :documentable, dependent: :destroy  # Ensure documents are destroyed
+  belongs_to :owned_by, class_name: 'User', foreign_key: :owned_by_id, optional: true
+  belongs_to :created_by, class_name: 'AdminUser', foreign_key: :created_by_id
+  belongs_to :managed_by, class_name: 'AdminUser', foreign_key: :managed_by_id
+  # has_one :business_seo_profile, dependent: :destroy
+  has_one :social_media_profile, dependent: :destroy
+  has_many :faqs, as: :faqable, dependent: :destroy
+  has_many :documents, as: :documentable, dependent: :destroy
 
   BCARD_TYPES = %w[free paid].freeze
   enum bcard_type: %i[free paid]
-  enum status: %i[deactivate active]
   enum bank_type: %i[saving current]
-
-  # Validations
+  has_many :business_seo_profile, as: :seoprofileable, dependent: :destroy
   validates :name, presence: true, length: { maximum: 128 }
 
   accepts_nested_attributes_for :business_sub_category, allow_destroy: true

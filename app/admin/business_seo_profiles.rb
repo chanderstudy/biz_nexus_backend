@@ -1,6 +1,8 @@
 # app/admin/business_seo_profiles.rb
 ActiveAdmin.register BusinessSeoProfile do
   menu parent: "Manage Business Card"
+
+  # Permit params
   permit_params :active, :keywords, :meta_tag, :description, images: []
 
   # Customize the index page
@@ -21,11 +23,12 @@ ActiveAdmin.register BusinessSeoProfile do
       f.input :keywords
       f.input :meta_tag
       f.input :description
-      f.input :images, as: :file, input_html: { multiple: true }
+      f.input :images, as: :file, input_html: { multiple: true } # Allow multiple image uploads
     end
     f.actions
   end
 
+  # Customize the show page
   show do
     attributes_table do
       row :active
@@ -36,19 +39,21 @@ ActiveAdmin.register BusinessSeoProfile do
       row :updated_at
     end
 
+    # Display attached images
     panel 'Images' do
       div do
         business_seo_profile.images.each do |image|
-        	div do
-          	image_tag rails_blob_path(image), style: 'max-height:300px'
+          div do
+            image_tag rails_blob_path(image), style: 'max-height: 300px; max-width: 300px;' # Adjust image size
           end
         end
       end
     end
+
     active_admin_comments
   end
 
-  # Add filters if necessary
+  # Filters
   filter :active
   filter :keywords
   filter :meta_tag

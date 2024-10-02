@@ -1,6 +1,6 @@
 # app/models/business_seo_profiles.rb
 class BusinessSeoProfile < ApplicationRecord
-  has_one :business_card
+  belongs_to :seoprofileable, polymorphic: true
   has_many_attached :images
 
   # Validations

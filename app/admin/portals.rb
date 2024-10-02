@@ -35,5 +35,5 @@ ActiveAdmin.register Portal do
   end
 
   # Disable form actions (since no edit/create access)
-  config.clear_action_items!
+  # config.clear_action_items!
 end

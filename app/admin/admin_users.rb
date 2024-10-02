@@ -1,11 +1,16 @@
 ActiveAdmin.register AdminUser do
-  permit_params :email, :password, :password_confirmation, :role_id, :name, :mobile, :sex, :blood_group, 
-                :aadhar_card, :pan_card, :gst_number, :address, :landmark, :qualification, :pincode, 
-                :dob, :dom, :added_by, :portal_id, :continent_id, :country_id, :state_id, :dist_id, 
+  permit_params :email, :password, :password_confirmation, :role_id, :name, :mobile, :sex, 
+                :blood_group, :aadhar_card, :pan_card, :gst_number, :address, :landmark, 
+                :qualification, :pincode, :dob, :dom, :added_by_id, :managed_by_id, 
+                :portal_id, :continent_id, :country_id, :state_id, :dist_id, 
                 :city_id, :area_id
+
   filter :email
   # filter :name
   # filter :mobile
+  # filter :role
+  # filter :added_by, as: :select, collection: -> { AdminUser.pluck(:email, :id) } # Filter for added_by
+  # filter :managed_by, as: :select, collection: -> { AdminUser.pluck(:email, :id) } # Filter for managed_by
 
   form do |f|
     f.inputs 'Admin User Details' do
@@ -26,7 +31,8 @@ ActiveAdmin.register AdminUser do
       f.input :pincode
       f.input :dob, as: :datepicker
       f.input :dom, as: :datepicker
-      f.input :added_by, as: :select, collection: AdminUser.pluck(:email, :id)
+      f.input :added_by_id, as: :select, collection: AdminUser.pluck(:email, :id), label: 'Added By' # Updated input for added_by
+      f.input :managed_by_id, as: :select, collection: AdminUser.pluck(:email, :id), label: 'Managed By' # Updated input for managed_by
       f.input :portal_id, as: :select, collection: Portal.pluck(:portal_name, :id)
       f.input :continent_id, as: :select, collection: Continent.pluck(:name, :id)
       f.input :country_id, as: :select, collection: Country.pluck(:name, :id)
@@ -53,6 +59,8 @@ ActiveAdmin.register AdminUser do
     column :address
     column :pincode
     column :dob
+    column :added_by # Show added_by in index
+    column :managed_by # Show managed_by in index
     column :created_at
     actions
   end
@@ -74,14 +82,15 @@ ActiveAdmin.register AdminUser do
       row :pincode
       row :dob
       row :dom
-      row :added_by
-      row :portal_id
-      row :continent_id
-      row :country_id
-      row :state_id
-      row :dist_id
-      row :city_id
-      row :area_id
+      row :added_by_admin # Show added_by information
+      row :managed_by_admin # Show managed_by information
+      row :portal
+      row :continent
+      row :country
+      row :state
+      row :district
+      row :city
+      row :area
       row :created_at
       row :updated_at
     end

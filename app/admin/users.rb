@@ -2,7 +2,7 @@ ActiveAdmin.register User do
   permit_params :email, :password, :password_confirmation, :name, :mobile, :sex, 
                 :blood_group, :address, :landmark, :qualification, :dob, :dom, 
                 :status, :portal_id, :continent_id, :country_id, :state_id, 
-                :dist_id, :city_id, :area_id
+                :dist_id, :city_id, :area_id, :added_by_id, :managed_by_id
 
   index do
     selectable_column
@@ -28,6 +28,8 @@ ActiveAdmin.register User do
   # filter :mobile
   # filter :status
   # filter :created_at
+  # filter :added_by_admin, as: :select, collection: -> { AdminUser.pluck(:email, :id) } # Added filter for added_by
+  # filter :managed_by_admin, as: :select, collection: -> { AdminUser.pluck(:email, :id) } # Added filter for managed_by
 
   form do |f|
     f.inputs 'User Details' do
@@ -51,6 +53,8 @@ ActiveAdmin.register User do
       f.input :dist_id, as: :select, collection: District.pluck(:dist_name, :dist_id)
       f.input :city_id, as: :select, collection: City.pluck(:city_name, :city_id)
       f.input :area_id
+      f.input :added_by_id, as: :select, collection: AdminUser.pluck(:email, :id), label: 'Added By' # New input for added_by
+      f.input :managed_by_id, as: :select, collection: AdminUser.pluck(:email, :id), label: 'Managed By' # New input for managed_by
     end
     f.actions
   end
@@ -75,6 +79,8 @@ ActiveAdmin.register User do
       row :district
       row :city
       row :area_id
+      row :added_by_admin # Show added_by information
+      row :managed_by_admin # Show managed_by information
       row :current_sign_in_at
       row :sign_in_count
       row :created_at

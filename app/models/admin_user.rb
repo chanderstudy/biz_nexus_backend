@@ -1,6 +1,7 @@
 class AdminUser < ApplicationRecord
   belongs_to :role, optional: true
   belongs_to :added_by_admin, class_name: 'AdminUser', foreign_key: :added_by, optional: true
+  belongs_to :managed_by_admin, class_name: 'AdminUser', foreign_key: :managed_by, optional: true
   belongs_to :portal, optional: true
   belongs_to :continent, optional: true
   belongs_to :country, optional: true
