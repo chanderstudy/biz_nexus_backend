@@ -16,9 +16,9 @@ ActiveAdmin.register BusinessCard do
                 :created_by_id, :managed_by_id, :owned_by_id,
                 :country_id, :continent_id,
                 business_seo_profile_attributes: [:id, :active, :keywords, :meta_tag, :description, :_destroy],
-                social_media_profile_attributes: [:id, :facebook, :youtube, :instagram, :linkedin, :other, :_destroy],
                 faqs_attributes: [:id, :question, :answer, :_destroy],
-                documents_attributes: [:id, :title, :document_type, :status, :file, :_destroy]
+                documents_attributes: [:id, :title, :document_type, :status, :file, :_destroy],
+                social_media_links_attributes: [:id, :social_media_type, :priority, :title, :url, :status, :_destroy]
 
   index do
     selectable_column
@@ -127,21 +127,21 @@ ActiveAdmin.register BusinessCard do
       f.input :managed_by, as: :select, collection: AdminUser.pluck(:email, :id), label: 'Managed By'
     end
 
+    f.has_many :social_media_links, heading: 'Social Media Links', allow_destroy: true, new_record: true do |sml|
+      sml.input :social_media_type#, as: :select, collection: SocialMediaLink.types.keys.map { |type| [type.humanize, type] }, label: 'Social Media Type'
+      sml.input :priority
+      sml.input :title
+      sml.input :url
+      sml.input :status, as: :select, collection: SocialMediaLink.statuses.keys.map { |status| [status.humanize, status] }, label: 'Status'
+      sml.input :_destroy, as: :boolean, label: 'Delete this Social Media Link?'
+    end
+
     f.has_many :business_seo_profile, heading: 'SEO Profile', allow_destroy: true, new_record: true do |bsp|
       bsp.input :active
       bsp.input :keywords
       bsp.input :meta_tag
       bsp.input :description
       bsp.input :_destroy, as: :boolean, label: 'Delete this SEO Profile?'
-    end
-
-    f.has_many :social_media_profile, heading: 'Social Media Profile', allow_destroy: true, new_record: true do |smp|
-      smp.input :facebook
-      smp.input :youtube
-      smp.input :instagram
-      smp.input :linkedin
-      smp.input :other
-      smp.input :_destroy, as: :boolean, label: 'Delete this Social Media Profile?'
     end
 
     f.has_many :faqs, heading: 'FAQs', allow_destroy: true, new_record: true do |faq|
@@ -152,7 +152,7 @@ ActiveAdmin.register BusinessCard do
 
     f.has_many :documents, heading: 'Documents', allow_destroy: true, new_record: true do |doc|
       doc.input :title
-      doc.input :document_type
+      doc.input :document_type, as: :select, collection: ['Galllery Photo', 'Galllery Video', 'Page Banner', 'Catalog Pdf', 'Catalog Video', 'Catalog Photo', 'QR Code Payment', 'QR Code Location', 'Logo']
       doc.input :status
       doc.input :file, as: :file
       doc.input :_destroy, as: :boolean, label: 'Delete this Document?'
@@ -220,13 +220,13 @@ ActiveAdmin.register BusinessCard do
         end
       end
 
-      panel "Social Media Profile" do
-        table_for business_card.social_media_profile do
-          column :facebook
-          column :youtube
-          column :instagram
-          column :linkedin
-          column :other
+      panel "Social Media Links" do
+        table_for resource.social_media_links do
+          column "Type" do |sml| sml.social_media_type end
+          column "Priority" do |sml| sml.priority end
+          column "Title" do |sml| sml.title end
+          column "URL" do |sml| link_to sml.url, sml.url, target: "_blank" end
+          column "Status" do |sml| sml.status.humanize end
         end
       end
 

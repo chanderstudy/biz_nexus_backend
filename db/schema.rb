@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_02_173745) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_02_184623) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -115,18 +115,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_02_173745) do
     t.index ["city_id"], name: "index_areas_on_city_id"
     t.index ["dist_id"], name: "index_areas_on_dist_id"
     t.index ["state_id"], name: "index_areas_on_state_id"
-  end
-
-  create_table "business_card_links", force: :cascade do |t|
-    t.bigint "business_card_id"
-    t.integer "type"
-    t.integer "priority"
-    t.string "title"
-    t.string "url"
-    t.integer "status"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["business_card_id"], name: "index_business_card_links_on_business_card_id"
   end
 
   create_table "business_cards", force: :cascade do |t|
@@ -437,16 +425,17 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_02_173745) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "social_media_profiles", force: :cascade do |t|
-    t.string "facebook", limit: 15
-    t.string "youtube", limit: 15
-    t.string "instagram", limit: 15
-    t.string "linkedin", limit: 15
-    t.string "other", limit: 15
+  create_table "social_media_links", force: :cascade do |t|
+    t.integer "social_media_type"
+    t.integer "priority"
+    t.string "title"
+    t.string "url"
+    t.integer "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "business_card_id"
-    t.index ["business_card_id"], name: "index_social_media_profiles_on_business_card_id"
+    t.string "linkable_type"
+    t.bigint "linkable_id"
+    t.index ["linkable_type", "linkable_id"], name: "index_social_media_links_on_linkable_type_and_linkable_id"
   end
 
   create_table "states", primary_key: "state_id", force: :cascade do |t|
@@ -536,7 +525,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_02_173745) do
   add_foreign_key "areas", "cities", primary_key: "city_id"
   add_foreign_key "areas", "districts", column: "dist_id", primary_key: "dist_id"
   add_foreign_key "areas", "states", primary_key: "state_id"
-  add_foreign_key "business_card_links", "business_cards"
   add_foreign_key "business_cards", "admin_users", column: "created_by_id"
   add_foreign_key "business_cards", "admin_users", column: "managed_by_id"
   add_foreign_key "business_cards", "areas", primary_key: "area_id"
@@ -558,7 +546,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_02_173745) do
   add_foreign_key "orders", "users", column: "agent_id"
   add_foreign_key "orders", "users", column: "payment_received_by_id"
   add_foreign_key "orders", "users", column: "placed_by_id"
-  add_foreign_key "social_media_profiles", "business_cards"
   add_foreign_key "states", "countries"
   add_foreign_key "users", "cities", primary_key: "city_id"
   add_foreign_key "users", "continents"

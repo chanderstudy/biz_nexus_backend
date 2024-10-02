@@ -10,9 +10,8 @@ class BusinessCard < ApplicationRecord
   belongs_to :owned_by, class_name: 'User', foreign_key: :owned_by_id, optional: true
   belongs_to :created_by, class_name: 'AdminUser', foreign_key: :created_by_id
   belongs_to :managed_by, class_name: 'AdminUser', foreign_key: :managed_by_id
-  # has_one :business_seo_profile, dependent: :destroy
-  has_one :social_media_profile, dependent: :destroy
   has_many :faqs, as: :faqable, dependent: :destroy
+  has_many :social_media_links, as: :linkable, dependent: :destroy 
   has_many :documents, as: :documentable, dependent: :destroy
 
   BCARD_TYPES = %w[free paid].freeze
@@ -23,7 +22,7 @@ class BusinessCard < ApplicationRecord
 
   accepts_nested_attributes_for :business_sub_category, allow_destroy: true
   accepts_nested_attributes_for :business_seo_profile, allow_destroy: true
-  accepts_nested_attributes_for :social_media_profile, allow_destroy: true
+  accepts_nested_attributes_for :social_media_links, allow_destroy: true
   accepts_nested_attributes_for :faqs, allow_destroy: true  # Added for FAQs
   accepts_nested_attributes_for :documents, allow_destroy: true  # Added for Documents
 
