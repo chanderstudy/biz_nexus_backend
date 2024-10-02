@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_29_162906) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_02_082316) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -140,7 +140,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_29_162906) do
     t.string "longitude"
     t.integer "bcard_type"
     t.integer "bcard_power"
-    t.bigint "business_category_id"
     t.bigint "business_sub_category_id"
     t.integer "status"
     t.boolean "seo_active", default: false
@@ -182,7 +181,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_29_162906) do
     t.boolean "external_portal_publish", default: false
     t.text "achivement"
     t.index ["area_id"], name: "index_business_cards_on_area_id"
-    t.index ["business_category_id"], name: "index_business_cards_on_business_category_id"
     t.index ["business_sub_category_id"], name: "index_business_cards_on_business_sub_category_id"
     t.index ["city_id"], name: "index_business_cards_on_city_id"
     t.index ["district_id"], name: "index_business_cards_on_district_id"
@@ -214,7 +212,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_29_162906) do
   end
 
   create_table "business_sub_categories", force: :cascade do |t|
-    t.bigint "business_category_id"
     t.string "name", limit: 128
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -223,7 +220,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_29_162906) do
     t.string "slug"
     t.integer "priority"
     t.boolean "publish"
-    t.index ["business_category_id"], name: "index_business_sub_categories_on_business_category_id"
+    t.integer "business_category_ids", default: [], array: true
   end
 
   create_table "cities", primary_key: "city_id", force: :cascade do |t|
@@ -544,14 +541,12 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_29_162906) do
   add_foreign_key "business_cards", "admin_users", column: "created_by"
   add_foreign_key "business_cards", "admin_users", column: "managed_by"
   add_foreign_key "business_cards", "areas", primary_key: "area_id"
-  add_foreign_key "business_cards", "business_categories"
   add_foreign_key "business_cards", "business_sub_categories"
   add_foreign_key "business_cards", "cities", primary_key: "city_id"
   add_foreign_key "business_cards", "districts", primary_key: "dist_id"
   add_foreign_key "business_cards", "plans"
   add_foreign_key "business_cards", "states", primary_key: "state_id"
   add_foreign_key "business_seo_profiles", "business_cards"
-  add_foreign_key "business_sub_categories", "business_categories"
   add_foreign_key "cities", "districts", column: "dist_id", primary_key: "dist_id"
   add_foreign_key "cities", "states", primary_key: "state_id"
   add_foreign_key "districts", "states", primary_key: "state_id"

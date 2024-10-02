@@ -44,7 +44,7 @@ ActiveAdmin.register User do
       f.input :dob, as: :datepicker
       f.input :dom, as: :datepicker
       f.input :status
-      f.input :portal_id, as: :select, collection: Portal.pluck(:name, :id)
+      f.input :portal_id, as: :select, collection: Portal.pluck(:portal_name, :id)
       f.input :continent_id, as: :select, collection: Continent.pluck(:name, :id)
       f.input :country_id, as: :select, collection: Country.pluck(:name, :id)
       f.input :state_id, as: :select, collection: State.pluck(:state_name, :state_id)

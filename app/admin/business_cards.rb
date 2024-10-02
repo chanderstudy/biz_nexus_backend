@@ -2,8 +2,7 @@ ActiveAdmin.register BusinessCard do
   menu parent: "Manage Business Card"
   
   permit_params :name, :owner_name, :email, :address, :landmark, :mobile, 
-                :latitude, :longitude, :bcard_type, :bcard_power, 
-                :business_category_id, :business_sub_category_id, 
+                :latitude, :longitude, :bcard_type, :bcard_power, :business_sub_category_id, 
                 :status, :seo_active, :website, :bank_account, 
                 :bank_ifsc, :bank_type, :qrcode_active, :qrcode_file, 
                 :state_id, :district_id, :city_id, :area_id, :portal_id,
@@ -34,7 +33,6 @@ ActiveAdmin.register BusinessCard do
     column :longitude
     column :bcard_type
     column :bcard_power
-    column :business_category
     column :business_sub_category
     column :status
     column :seo_active
@@ -86,7 +84,6 @@ ActiveAdmin.register BusinessCard do
       f.input :longitude
       f.input :bcard_type
       f.input :bcard_power
-      f.input :business_category
       f.input :business_sub_category
       f.input :status
       f.input :seo_active
@@ -175,7 +172,6 @@ ActiveAdmin.register BusinessCard do
   filter :longitude
   filter :bcard_type
   filter :bcard_power
-  filter :business_category
   filter :business_sub_category
   filter :status
   filter :seo_active
