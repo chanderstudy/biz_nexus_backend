@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_02_082316) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_02_100044) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -452,17 +452,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_02_082316) do
     t.float "state_lati"
     t.float "state_reach_img"
     t.string "state_map"
-    t.integer "estd_dd"
-    t.integer "estd_mm"
-    t.integer "estd_yy"
     t.string "state_web"
     t.string "state_lang1"
     t.string "state_lang2"
-    t.string "state_seo_kword"
-    t.string "state_seo_mtag"
-    t.text "state_seo_data"
-    t.string "state_p_status"
-    t.string "state_status"
     t.string "state_dist"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
