@@ -13,6 +13,7 @@ class AdminUser < ApplicationRecord
          :recoverable, :rememberable, :validatable
   belongs_to :role
   has_many :added_admins, class_name: 'AdminUser', foreign_key: :added_by
+  has_many :managed_admins, class_name: 'AdminUser', foreign_key: :managed_by
   has_many :orders
 
   validates :email, presence: true, uniqueness: true

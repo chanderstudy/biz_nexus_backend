@@ -1,7 +1,7 @@
 ActiveAdmin.register AdminUser do
   permit_params :email, :password, :password_confirmation, :role_id, :name, :mobile, :sex, 
                 :blood_group, :aadhar_card, :pan_card, :gst_number, :address, :landmark, 
-                :qualification, :pincode, :dob, :dom, :added_by_id, :managed_by_id, 
+                :qualification, :pincode, :dob, :dom, :added_by, :managed_by, 
                 :portal_id, :continent_id, :country_id, :state_id, :dist_id, 
                 :city_id, :area_id
 
@@ -31,8 +31,8 @@ ActiveAdmin.register AdminUser do
       f.input :pincode
       f.input :dob, as: :datepicker
       f.input :dom, as: :datepicker
-      f.input :added_by_id, as: :select, collection: AdminUser.pluck(:email, :id), label: 'Added By' # Updated input for added_by
-      f.input :managed_by_id, as: :select, collection: AdminUser.pluck(:email, :id), label: 'Managed By' # Updated input for managed_by
+      f.input :added_by, as: :select, collection: AdminUser.pluck(:email, :id), label: 'Added By' # Updated input for added_by
+      f.input :managed_by, as: :select, collection: AdminUser.pluck(:email, :id), label: 'Managed By' # Updated input for managed_by
       f.input :portal_id, as: :select, collection: Portal.pluck(:portal_name, :id)
       f.input :continent_id, as: :select, collection: Continent.pluck(:name, :id)
       f.input :country_id, as: :select, collection: Country.pluck(:name, :id)

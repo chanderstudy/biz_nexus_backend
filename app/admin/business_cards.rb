@@ -95,11 +95,11 @@ ActiveAdmin.register BusinessCard do
       f.input :bank_type
       f.input :continent, as: :searchable_select, fields: [:name], display_name: 'Continent'
       f.input :country, as: :searchable_select, fields: [:name], display_name: 'Country'
-      f.input :state, as: :searchable_select, fields: [:state_name], display_name: 'State'
-      f.input :district, as: :searchable_select, fields: [:dist_name], display_name: 'District'
-      f.input :city, as: :searchable_select, fields: [:city_name], display_name: 'City'
-      f.input :area, as: :searchable_select, fields: [:area_name], display_name: 'Area'
-      f.input :portal, as: :searchable_select, fields: [:portal_name], display_name: 'Portal'
+      f.input :state, as: :select, collection: State.pluck(:state_name, :state_id), label: 'State'
+      f.input :district, as: :select, collection: District.pluck(:dist_name, :dist_id), label: 'District'
+      f.input :city, as: :select, collection: City.pluck(:city_name, :city_id), label: 'City'
+      f.input :area, as: :select, collection: Area.pluck(:area_name, :area_id), label: 'Area'
+      f.input :portal, as: :select, collection: Portal.pluck(:portal_name, :id), label: 'Portal'
       f.input :description
       f.input :owner_designation
       f.input :work_phone_number
