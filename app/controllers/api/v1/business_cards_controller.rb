@@ -1,6 +1,23 @@
 class Api::V1::BusinessCardsController < ApplicationController
   protect_from_forgery with: :null_session
 
+  def categories
+    categories = BusinessCategory.all
+    categories_with_subcategories = categories.map do |category|
+      {
+        id: category.id,
+        name: category.name,
+        description: category.description,
+        priority: category.priority,
+        slug: category.slug,
+        business_sub_categories: BusinessSubCategory.where('? = ANY(business_category_ids)', category.id).as_json(
+          only: [:id, :name, :description, :priority, :slug]
+        )
+      }
+    end
+    render json: { data: categories_with_subcategories }
+  end
+
   def index
     business_cards = BusinessCard.page(params[:page] || 1)
 

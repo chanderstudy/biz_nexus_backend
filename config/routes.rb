@@ -18,6 +18,7 @@ Rails.application.routes.draw do
       resources :business_cards, only: [:index] do
         collection do
           get :search
+          get :categories
         end
       end
     end

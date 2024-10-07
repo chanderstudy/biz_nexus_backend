@@ -3,6 +3,9 @@ class BusinessSubCategory < ApplicationRecord
   has_many :business_cards
   validates :name, presence: true, length: { maximum: 128 }
   validate :must_have_business_categories
+  belongs_to :business_category, optional: true
+
+  scope :for_category, ->(category_id) { where('? = ANY(business_category_ids)', category_id) }
 
   def self.ransackable_attributes(auth_object = nil)
     ["business_category_id", "created_at", "id", "name", "updated_at"]

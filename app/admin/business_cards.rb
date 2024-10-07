@@ -73,8 +73,8 @@ ActiveAdmin.register BusinessCard do
   end
 
   form do |f|
-    f.object.build_business_seo_profile if f.object.new_record?
-    f.object.build_social_media_profile if f.object.new_record?
+    # f.object.build_business_seo_profile if f.object.new_record?
+    # f.object.build_social_media_profile if f.object.new_record?
 
     f.inputs 'Business Card Details' do
       f.input :name
