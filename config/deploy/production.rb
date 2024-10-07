@@ -10,7 +10,7 @@ server "213.210.21.211", user: "deploy", roles: %w{app db web}
 
 set :rails_env, 'production'
 
-set :branch, 'master'
+set :branch, 'main'
 # role-based syntax
 # ==================
 # Default value for linked_dirs is []
