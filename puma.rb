@@ -28,7 +28,7 @@ threads 2, 2
 
 # Bind to the Unix socket
 # bind 'unix:////home/deploy/digi_donation/shared/tmp/sockets/puma.sock'
-bind 'tcp://127.0.0.1:9292'
+bind 'tcp://127.0.0.1:9295'
 
 # Number of worker processes
 workers 5
