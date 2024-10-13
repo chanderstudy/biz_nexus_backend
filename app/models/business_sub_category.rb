@@ -1,8 +1,9 @@
-# app/models/business_sub_category.rb
 class BusinessSubCategory < ApplicationRecord
-  has_many :business_cards
+  has_many :business_cards, -> { where('id = ANY (business_sub_category_ids)') }, class_name: 'BusinessCard'
+
   validates :name, presence: true, length: { maximum: 128 }
   validate :must_have_business_categories
+
   belongs_to :business_category, optional: true
 
   scope :for_category, ->(category_id) { where('? = ANY(business_category_ids)', category_id) }
@@ -15,6 +16,7 @@ class BusinessSubCategory < ApplicationRecord
     ["business_cards", "business_category"]
   end
 
+  # Method to fetch associated categories
   def business_categories
     BusinessCategory.where(id: business_category_ids)
   end

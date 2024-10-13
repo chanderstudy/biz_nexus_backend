@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_04_040522) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_13_081958) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -129,7 +129,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_04_040522) do
     t.string "longitude"
     t.integer "bcard_type"
     t.integer "bcard_power"
-    t.bigint "business_sub_category_id"
     t.boolean "seo_active", default: false
     t.string "website", limit: 94
     t.string "bank_account", limit: 15
@@ -172,8 +171,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_04_040522) do
     t.bigint "country_id"
     t.bigint "continent_id"
     t.bigint "owned_by_id"
+    t.integer "business_sub_category_ids", default: [], array: true
     t.index ["area_id"], name: "index_business_cards_on_area_id"
-    t.index ["business_sub_category_id"], name: "index_business_cards_on_business_sub_category_id"
     t.index ["city_id"], name: "index_business_cards_on_city_id"
     t.index ["continent_id"], name: "index_business_cards_on_continent_id"
     t.index ["country_id"], name: "index_business_cards_on_country_id"
@@ -529,7 +528,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_04_040522) do
   add_foreign_key "business_cards", "admin_users", column: "created_by_id"
   add_foreign_key "business_cards", "admin_users", column: "managed_by_id"
   add_foreign_key "business_cards", "areas", primary_key: "area_id"
-  add_foreign_key "business_cards", "business_sub_categories"
   add_foreign_key "business_cards", "cities", primary_key: "city_id"
   add_foreign_key "business_cards", "continents"
   add_foreign_key "business_cards", "countries"

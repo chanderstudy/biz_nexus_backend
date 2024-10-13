@@ -1,24 +1,23 @@
 ActiveAdmin.register BusinessCard do
   menu parent: "Manage Business Card"
-
+  filter :name
   permit_params :name, :owner_name, :email, :address, :landmark, :mobile, 
-                :latitude, :longitude, :bcard_type, :bcard_power, :business_sub_category_id, 
-                :seo_active, :website, :bank_account, 
-                :bank_ifsc, :bank_type, :state_id, :district_id, :city_id, :area_id, :portal_id,
+                :latitude, :longitude, :bcard_type, :bcard_power, 
+                :seo_active, :website, :bank_account, :bank_ifsc, :bank_type, 
+                :state_id, :district_id, :city_id, :area_id, :portal_id,
                 :description, :owner_designation, :work_phone_number, 
-                :established_date, :short_url, 
-                :published, :promotion_type, :plan_id, :qr_publish, 
-                :bank_name, :legal_publish, :business_pan_card, 
-                :gst_number, :service_publish, :catalog_publish, 
-                :social_media_publish, :photo_gallery_publish, 
-                :video_gallery_publish, :feedback_publish, 
-                :enquiry_publish, :external_portal_publish, :achivement,
-                :created_by_id, :managed_by_id, :owned_by_id,
-                :country_id, :continent_id,
+                :established_date, :short_url, :published, :promotion_type, 
+                :plan_id, :qr_publish, :bank_name, :legal_publish, 
+                :business_pan_card, :gst_number, :service_publish, 
+                :catalog_publish, :social_media_publish, :photo_gallery_publish, 
+                :video_gallery_publish, :feedback_publish, :enquiry_publish, 
+                :external_portal_publish, :achivement, :created_by_id, 
+                :managed_by_id, :owned_by_id, :country_id, :continent_id,
                 business_seo_profile_attributes: [:id, :active, :keywords, :meta_tag, :description, :_destroy],
                 faqs_attributes: [:id, :question, :answer, :_destroy],
                 documents_attributes: [:id, :title, :document_type, :status, :file, :_destroy],
-                social_media_links_attributes: [:id, :social_media_type, :priority, :title, :url, :status, :_destroy]
+                social_media_links_attributes: [:id, :social_media_type, :priority, :title, :url, :status, :_destroy],
+                business_sub_category_ids: []
 
   index do
     selectable_column
@@ -33,14 +32,16 @@ ActiveAdmin.register BusinessCard do
     column :longitude
     column :bcard_type
     column :bcard_power
-    column :business_sub_category
+    column :business_sub_categories do |card|
+      BusinessSubCategory.where(id: card.business_sub_category_ids).pluck(:name).join(', ')
+    end
     column :seo_active
     column :website
     column :bank_account
     column :bank_ifsc
     column :bank_type
-    column :continent # Add this line
-    column :country   # Add this line
+    column :continent # Added
+    column :country   # Added
     column :state
     column :district
     column :city
@@ -73,9 +74,6 @@ ActiveAdmin.register BusinessCard do
   end
 
   form do |f|
-    # f.object.build_business_seo_profile if f.object.new_record?
-    # f.object.build_social_media_profile if f.object.new_record?
-
     f.inputs 'Business Card Details' do
       f.input :name
       f.input :owner_name
@@ -87,7 +85,9 @@ ActiveAdmin.register BusinessCard do
       f.input :longitude
       f.input :bcard_type
       f.input :bcard_power
-      f.input :business_sub_category
+      f.input :business_sub_category_ids, as: :select, 
+         collection: BusinessSubCategory.pluck(:name, :id), 
+         input_html: { multiple: true }
       f.input :seo_active
       f.input :website
       f.input :bank_account
@@ -128,7 +128,7 @@ ActiveAdmin.register BusinessCard do
     end
 
     f.has_many :social_media_links, heading: 'Social Media Links', allow_destroy: true, new_record: true do |sml|
-      sml.input :social_media_type#, as: :select, collection: SocialMediaLink.types.keys.map { |type| [type.humanize, type] }, label: 'Social Media Type'
+      sml.input :social_media_type
       sml.input :priority
       sml.input :title
       sml.input :url
@@ -152,7 +152,7 @@ ActiveAdmin.register BusinessCard do
 
     f.has_many :documents, heading: 'Documents', allow_destroy: true, new_record: true do |doc|
       doc.input :title
-      doc.input :document_type, as: :select, collection: ['Galllery Photo', 'Galllery Video', 'Page Banner', 'Catalog Pdf', 'Catalog Video', 'Catalog Photo', 'QR Code Payment', 'QR Code Location', 'Logo']
+      doc.input :document_type, as: :select, collection: ['Galllery Photo', 'Galllery Video', 'Page Banner', 'Catalog Pdf', 'Catalog Video', 'Catalog Photo', 'QR Code Payment', 'QR Code Location', 'Logo', 'Thumbnail']
       doc.input :status
       doc.input :file, as: :file
       doc.input :_destroy, as: :boolean, label: 'Delete this Document?'
@@ -173,7 +173,9 @@ ActiveAdmin.register BusinessCard do
       row :longitude
       row :bcard_type
       row :bcard_power
-      row :business_sub_category
+      row :business_sub_categories do |card|
+        BusinessSubCategory.where(id: card.business_sub_category_ids).pluck(:name).join(', ')
+      end
       row :seo_active
       row :website
       row :bank_account
@@ -226,52 +228,27 @@ ActiveAdmin.register BusinessCard do
           column "Priority" do |sml| sml.priority end
           column "Title" do |sml| sml.title end
           column "URL" do |sml| link_to sml.url, sml.url, target: "_blank" end
-          column "Status" do |sml| sml.status.humanize end
+          column "Status" do |sml| sml.status end
         end
       end
 
       panel "FAQs" do
-        table_for business_card.faqs do
+        table_for resource.faqs do
           column :question
           column :answer
         end
       end
 
       panel "Documents" do
-        table_for business_card.documents do
+        table_for resource.documents do
           column :title
           column :document_type
           column :status
-          column "File" do |doc|
-            link_to doc.file.filename, url_for(doc.file) if doc.file.attached?
+          column :file do |doc|
+            link_to 'View', rails_blob_path(doc.file, disposition: "attachment"), target: "_blank" if doc.file.attached?
           end
         end
       end
     end
   end
-
-  # Other configurations like form, index, filters, etc.
-  filter :name
-  # filter :owner_name
-  # filter :email
-  # filter :address
-  # filter :landmark
-  # filter :mobile
-  # filter :latitude
-  # filter :longitude
-  # filter :bcard_type
-  # filter :bcard_power
-  # filter :business_sub_category
-  # filter :seo_active
-  # filter :website
-  # filter :bank_account
-  # filter :bank_ifsc
-  # filter :bank_type
-  # filter :state
-  # filter :district
-  # filter :city
-  # filter :area
-  # filter :created_by, as: :select, collection: -> { AdminUser.pluck(:email, :id) } # Filter for created_by
-  # filter :managed_by, as: :select, collection: -> { AdminUser.pluck(:email, :id) } # Filter for managed_by
-  # filter :owned_by, as: :select, collection: -> { User.pluck(:email, :id) } # Filter for owned_by
 end
