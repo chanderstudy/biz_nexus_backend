@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_13_081958) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_13_091531) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -172,6 +172,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_13_081958) do
     t.bigint "continent_id"
     t.bigint "owned_by_id"
     t.integer "business_sub_category_ids", default: [], array: true
+    t.integer "business_card_for"
     t.index ["area_id"], name: "index_business_cards_on_area_id"
     t.index ["city_id"], name: "index_business_cards_on_city_id"
     t.index ["continent_id"], name: "index_business_cards_on_continent_id"

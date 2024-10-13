@@ -19,9 +19,13 @@ class BusinessCard < ApplicationRecord
   BCARD_TYPES = %w[free paid].freeze
   enum bcard_type: %i[free paid]
   enum bank_type: %i[saving current]
+  enum business_card_for: %i[individual business]
+  # enum promotion_type: %i[test ttest1]
+  
   
   has_many :business_seo_profile, as: :seoprofileable, dependent: :destroy
   validates :name, presence: true, length: { maximum: 128 }
+  after_initialize :set_default_values, if: :new_record?
 
   # Nested attributes
   accepts_nested_attributes_for :business_seo_profile, allow_destroy: true
@@ -44,8 +48,14 @@ class BusinessCard < ApplicationRecord
   def self.ransackable_associations(auth_object = nil)
     [
       "state", "district", "city", "area",
-      "business_category", "business_sub_categories",  # Updated to plural
+      "business_category", "business_sub_categories",
       "business_seo_profile", "social_media_profile"
     ]
+  end
+
+  private
+
+  def set_default_values
+    self.promotion_type ||= 'free_listing'
   end
 end

@@ -8,7 +8,7 @@ ActiveAdmin.register BusinessCard do
                 :description, :owner_designation, :work_phone_number, 
                 :established_date, :short_url, :published, :promotion_type, 
                 :plan_id, :qr_publish, :bank_name, :legal_publish, 
-                :business_pan_card, :gst_number, :service_publish, 
+                :business_pan_card, :gst_number, :service_publish, :business_card_for,
                 :catalog_publish, :social_media_publish, :photo_gallery_publish, 
                 :video_gallery_publish, :feedback_publish, :enquiry_publish, 
                 :external_portal_publish, :achivement, :created_by_id, 
@@ -31,6 +31,7 @@ ActiveAdmin.register BusinessCard do
     column :latitude
     column :longitude
     column :bcard_type
+    column :business_card_for
     column :bcard_power
     column :business_sub_categories do |card|
       BusinessSubCategory.where(id: card.business_sub_category_ids).pluck(:name).join(', ')
@@ -84,6 +85,7 @@ ActiveAdmin.register BusinessCard do
       f.input :latitude
       f.input :longitude
       f.input :bcard_type
+      f.input :business_card_for
       f.input :bcard_power
       f.input :business_sub_category_ids, as: :select, 
          collection: BusinessSubCategory.pluck(:name, :id), 
@@ -106,7 +108,10 @@ ActiveAdmin.register BusinessCard do
       f.input :established_date
       f.input :short_url
       f.input :published
-      f.input :promotion_type
+      # f.input :promotion_type, as: :select, 
+      #   collection: [['Free listing', 'free_listing'],['Promotion', 'promotion'], ['Advertisement', 'advertisement']],
+      #   include_blank: false, 
+      #   input_html: { value: 'free_listing' }
       f.input :plan_id
       f.input :qr_publish
       f.input :bank_name
@@ -172,6 +177,7 @@ ActiveAdmin.register BusinessCard do
       row :latitude
       row :longitude
       row :bcard_type
+      row :business_card_for
       row :bcard_power
       row :business_sub_categories do |card|
         BusinessSubCategory.where(id: card.business_sub_category_ids).pluck(:name).join(', ')
