@@ -15,10 +15,11 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resources :business_cards, only: [:index] do
+      resources :business_cards, only: [:index, :show] do
         collection do
           get :search
           get :categories
+          get :by_category_subcategory
         end
       end
     end

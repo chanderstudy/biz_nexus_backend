@@ -13,9 +13,6 @@ class BusinessCard < ApplicationRecord
   has_many :social_media_links, as: :linkable, dependent: :destroy
   has_many :documents, as: :documentable, dependent: :destroy
 
-  # Updated: association for business subcategories
-  # has_many :business_sub_categories, -> { where('id = ANY (business_sub_category_ids)') }, class_name: 'BusinessSubCategory'
-
   BCARD_TYPES = %w[free paid].freeze
   enum bcard_type: %i[free paid]
   enum bank_type: %i[saving current]
@@ -51,6 +48,29 @@ class BusinessCard < ApplicationRecord
       "business_category", "business_sub_categories",
       "business_seo_profile", "social_media_profile"
     ]
+  end
+
+  def business_sub_categories
+    BusinessSubCategory.where(id: business_sub_category_ids)
+                       .select(:name, :slug)
+                       .distinct
+  end
+
+  def business_categories
+    category_ids = BusinessSubCategory.where(id: business_sub_category_ids)
+                                      .pluck(:business_category_ids)
+                                      .flatten
+                                      .uniq
+    BusinessCategory.where(id: category_ids)
+                    .select(:name, :slug)
+                    .distinct
+  end
+
+  def category_data
+    {
+      categories: business_categories.as_json(only: [:name, :slug]),
+      subcategories: business_sub_categories.as_json(only: [:name, :slug])
+    }
   end
 
   private
