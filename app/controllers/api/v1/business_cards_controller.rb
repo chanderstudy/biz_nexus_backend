@@ -1,6 +1,60 @@
 class Api::V1::BusinessCardsController < ApplicationController
   protect_from_forgery with: :null_session
 
+  def all_categories
+    page = params[:page] || 1
+    per_page = params[:per_page] || 10
+
+    categories = BusinessCategory.page(page).per(per_page)
+
+    if categories.present?
+      render json: {
+        data: categories.as_json(
+          only: [:id, :name, :slug, :description, :priority]
+        ),
+        current_page: categories.current_page,
+        total_pages: categories.total_pages,
+        total_count: categories.total_count,
+        next_page: categories.next_page,
+        prev_page: categories.prev_page,
+        success: true,
+        status: 200
+      }
+    else
+      render json: { message: 'No categories found' }, success: false, status: 404
+    end
+  end
+
+  def get_sub_categories
+    page = params[:page] || 1
+    per_page = params[:per_page] || 10
+    category_ids = params[:category_ids].present? ? params[:category_ids].split(',').map(&:to_i) : []
+
+    if category_ids.present?
+      subcategories = BusinessSubCategory.where("business_category_ids && ARRAY[?]::integer[]", category_ids)
+                                       .page(page).per(per_page)
+
+      if subcategories.present?
+        render json: {
+          data: subcategories.as_json(
+            only: [:id, :name, :slug, :description, :priority]
+          ),
+          current_page: subcategories.current_page,
+          total_pages: subcategories.total_pages,
+          total_count: subcategories.total_count,
+          next_page: subcategories.next_page,
+          prev_page: subcategories.prev_page,
+          success: true,
+          status: 200
+        }
+      else
+        render json: { message: 'No subcategories found for the given categories' }, success: false, status: 404
+      end
+    else
+      render json: { message: 'Category IDs are required' }, success: false, status: 400
+    end
+  end
+
   def by_category_subcategory
     category_ids = params[:category_ids].present? ? params[:category_ids].split(',').map(&:to_i) : []
     subcategory_ids = params[:subcategory_ids].present? ? params[:subcategory_ids].split(',').map(&:to_i) : []

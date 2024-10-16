@@ -20,6 +20,8 @@ Rails.application.routes.draw do
           get :search
           get :categories
           get :by_category_subcategory
+          get :get_sub_categories
+          get :all_categories
         end
       end
     end
