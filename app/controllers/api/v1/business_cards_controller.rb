@@ -58,11 +58,9 @@ class Api::V1::BusinessCardsController < ApplicationController
   def by_category_subcategory
     category_ids = params[:category_ids].present? ? params[:category_ids].split(',').map(&:to_i) : []
     subcategory_ids = params[:subcategory_ids].present? ? params[:subcategory_ids].split(',').map(&:to_i) : []
-    
-    # Default to page 1 if not provided, and allow specifying page size with `per_page`
+    district_ids = params[:district_ids].present? ? params[:district_ids].split(',').map(&:to_i) : []
     page = params[:page] || 1
     per_page = params[:per_page] || 10
-    
     business_cards = BusinessCard.all
 
     if category_ids.present?
@@ -70,13 +68,8 @@ class Api::V1::BusinessCardsController < ApplicationController
       subcategory_ids += subcategory_ids_from_categories
     end
 
-    if subcategory_ids.present?
-      business_cards = business_cards.where('? = ANY(business_sub_category_ids)', subcategory_ids)
-    end
-
-    return render json: { "messages": "No Card Found" } unless category_ids.present? || subcategory_ids.present?
-
-    # Apply pagination
+    business_cards = business_cards.where('? = ANY(business_sub_category_ids)', subcategory_ids) if subcategory_ids.present?
+    business_cards = business_cards.where(district_id: district_ids) if district_ids.present?
     paginated_business_cards = business_cards.page(page).per(per_page)
 
     if paginated_business_cards.present?
@@ -105,7 +98,7 @@ class Api::V1::BusinessCardsController < ApplicationController
         status: 200
       }
     else
-      render json: { message: 'No business cards found for the given categories or subcategories' }, success: false, status: 404
+      render json: { message: 'No business cards found for the given categories, subcategories and districts' }, success: false, status: 404
     end
   end
 
