@@ -64,12 +64,15 @@ class Api::V1::BusinessCardsController < ApplicationController
     business_cards = BusinessCard.all
 
     if category_ids.present?
+      # Fetch subcategory IDs associated with the provided category IDs
       subcategory_ids_from_categories = BusinessSubCategory.where("business_category_ids && ARRAY[?]::integer[]", category_ids).pluck(:id)
       subcategory_ids += subcategory_ids_from_categories
     end
 
-    business_cards = business_cards.where('? = ANY(business_sub_category_ids)', subcategory_ids) if subcategory_ids.present?
+    # Correct the query to check for any overlap in subcategory IDs using the '&&' operator
+    business_cards = business_cards.where('business_sub_category_ids && ARRAY[?]::integer[]', subcategory_ids) if subcategory_ids.present?
     business_cards = business_cards.where(district_id: district_ids) if district_ids.present?
+    
     paginated_business_cards = business_cards.page(page).per(per_page)
 
     if paginated_business_cards.present?
@@ -98,10 +101,9 @@ class Api::V1::BusinessCardsController < ApplicationController
         status: 200
       }
     else
-      render json: { message: 'No business cards found for the given categories, subcategories and districts' }, success: false, status: 404
+      render json: { message: 'No business cards found for the given categories, subcategories, and districts' }, success: false, status: 404
     end
   end
-
 
   def show
     business_card = BusinessCard.find_by(id: params[:id])
