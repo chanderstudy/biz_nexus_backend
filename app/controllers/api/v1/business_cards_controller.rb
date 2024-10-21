@@ -33,25 +33,25 @@ class Api::V1::BusinessCardsController < ApplicationController
     if category_ids.present?
       subcategories = BusinessSubCategory.where("business_category_ids && ARRAY[?]::integer[]", category_ids)
                                        .page(page).per(per_page)
-
-      if subcategories.present?
-        render json: {
-          data: subcategories.as_json(
-            only: [:id, :name, :slug, :description, :priority]
-          ),
-          current_page: subcategories.current_page,
-          total_pages: subcategories.total_pages,
-          total_count: subcategories.total_count,
-          next_page: subcategories.next_page,
-          prev_page: subcategories.prev_page,
-          success: true,
-          status: 200
-        }
-      else
-        render json: { message: 'No subcategories found for the given categories' }, success: false, status: 404
-      end
     else
-      render json: { message: 'Category IDs are required' }, success: false, status: 400
+      subcategories = BusinessSubCategory.page(page).per(per_page)
+    end
+
+    if subcategories.present?
+      render json: {
+        data: subcategories.as_json(
+          only: [:id, :name, :slug, :description, :priority]
+        ),
+        current_page: subcategories.current_page,
+        total_pages: subcategories.total_pages,
+        total_count: subcategories.total_count,
+        next_page: subcategories.next_page,
+        prev_page: subcategories.prev_page,
+        success: true,
+        status: 200
+      }
+    else
+      render json: { message: 'No subcategories found for the given categories' }, success: false, status: 404
     end
   end
 
@@ -131,32 +131,47 @@ class Api::V1::BusinessCardsController < ApplicationController
   end
 
 
-  def categories
-    categories = BusinessCategory.all
-    categories_with_subcategories = categories.map do |category|
-      categories = BusinessSubCategory.where('? = ANY(business_category_ids)', category.id)
-      if categories.present?
-        cards_count = BusinessCard.where('business_sub_category_ids && ARRAY[?]::integer[]', categories.pluck(:id)).count
-      else
-        cards_count = 0
+ def categories
+  categories = BusinessCategory.all
+  categories_with_subcategories = categories.map do |category|
+    subcategories = BusinessSubCategory.where('? = ANY(business_category_ids)', category.id)
+    
+    subcategories_with_card_counts = subcategories.map do |subcategory|
+      subcategory_cards_count = BusinessCard.where('business_sub_category_ids && ARRAY[?]::integer[]', [subcategory.id]).count
+      
+      if subcategory_cards_count > 0
+        {
+          id: subcategory.id,
+          name: subcategory.name,
+          description: subcategory.description,
+          priority: subcategory.priority,
+          slug: subcategory.slug,
+          cards_count: subcategory_cards_count
+        }
       end
+    end.compact # Remove nil values for subcategories with no cards
+    
+    total_cards_count = subcategories_with_card_counts.sum { |subcat| subcat[:cards_count] }
+
+    if total_cards_count > 0
       {
         id: category.id,
         name: category.name,
         description: category.description,
         priority: category.priority,
         slug: category.slug,
-        cards_count: cards_count,
-        business_sub_categories: categories.as_json(
-          only: [:id, :name, :description, :priority, :slug]
-        )
+        cards_count: total_cards_count,
+        business_sub_categories: subcategories_with_card_counts
       }
     end
-    render json: { data: categories_with_subcategories }
-  end
+  end.compact # Remove nil values for categories with no cards
+
+  render json: { data: categories_with_subcategories }
+end
+
 
   def index
-    business_cards = BusinessCard.page(params[:page] || 1)
+    business_cards = BusinessCard.page(params[:page] || 1).per_page(params[:per_page] || 10)
 
     if business_cards.present?
       render json: {
