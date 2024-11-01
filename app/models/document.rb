@@ -8,6 +8,6 @@ class Document < ApplicationRecord
   validates :status, presence: true
 
   def file_url
-    Rails.application.routes.url_helpers.rails_blob_url(file, only_path: true) if file.attached?
+    Rails.application.routes.url_helpers.rails_blob_url(file) if file.attached?
   end
 end
