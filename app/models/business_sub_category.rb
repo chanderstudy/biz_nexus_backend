@@ -3,6 +3,7 @@ class BusinessSubCategory < ApplicationRecord
 
   validates :name, presence: true, length: { maximum: 128 }
   validate :must_have_business_categories
+  has_one_attached :logo
 
   belongs_to :business_category, optional: true
 
@@ -19,6 +20,10 @@ class BusinessSubCategory < ApplicationRecord
   # Method to fetch associated categories
   def business_categories
     BusinessCategory.where(id: business_category_ids)
+  end
+
+  def logo_url
+    Rails.application.routes.url_helpers.rails_blob_url(logo) if logo.attached?
   end
 
   private
