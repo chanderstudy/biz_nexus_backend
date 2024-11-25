@@ -1,6 +1,6 @@
 ActiveAdmin.register BusinessCategory do
   menu parent: "Manage Business Card"
-  permit_params :name, :description, :code, :slug, :priority, :publish, :logo, :category_type
+  permit_params :name, :description, :code, :slug, :priority, :publish, :logo, :banner, :category_type
 
   # Customize the index page
   index do
@@ -26,6 +26,7 @@ ActiveAdmin.register BusinessCategory do
       f.input :priority
       f.input :publish
       f.input :logo, as: :file
+      f.input :banner, as: :file
       f.input :category_type
     end
     f.actions
@@ -51,6 +52,9 @@ ActiveAdmin.register BusinessCategory do
       row :category_type
       row "Logo" do |category|
         image_tag(category.logo,width:100,height:80)
+      end
+      row "Banner" do |category|
+        image_tag(category.banner,width:100,height:80)
       end
       row :created_at
       row :updated_at

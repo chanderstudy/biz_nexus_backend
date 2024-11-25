@@ -4,6 +4,7 @@ class BusinessSubCategory < ApplicationRecord
   validates :name, presence: true, length: { maximum: 128 }
   validate :must_have_business_categories
   has_one_attached :logo
+  has_one_attached :banner
 
   belongs_to :business_category, optional: true
 
@@ -24,6 +25,10 @@ class BusinessSubCategory < ApplicationRecord
 
   def logo_url
     Rails.application.routes.url_helpers.rails_blob_url(logo) if logo.attached?
+  end
+
+  def banner_url
+    Rails.application.routes.url_helpers.rails_blob_url(banner) if banner.attached?
   end
 
   private

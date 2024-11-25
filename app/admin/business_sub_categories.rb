@@ -1,7 +1,7 @@
 ActiveAdmin.register BusinessSubCategory do
   menu parent: "Manage Business Card"
 
-  permit_params :name, :description, :code, :slug, :priority, :publish, :logo, business_category_ids: []
+  permit_params :name, :description, :code, :slug, :priority, :publish, :logo, :banner, business_category_ids: []
 
   before_action only: [:create, :update] do
     params[:business_sub_category][:business_category_ids].reject!(&:blank?) if params[:business_sub_category][:business_category_ids].present?
@@ -36,6 +36,9 @@ ActiveAdmin.register BusinessSubCategory do
       row "Logo" do |sub_category|
         image_tag(sub_category.logo,width:100,height:80)
       end
+      row "Banner" do |sub_category|
+        image_tag(sub_category.banner,width:100,height:80)
+      end
       row :created_at
       row :updated_at
     end
@@ -50,6 +53,7 @@ ActiveAdmin.register BusinessSubCategory do
       f.input :code
       f.input :slug
       f.input :logo, as: :file
+      f.input :banner, as: :file
       f.input :priority
       f.input :publish
     end

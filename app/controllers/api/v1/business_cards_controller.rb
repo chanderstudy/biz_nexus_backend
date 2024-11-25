@@ -149,6 +149,7 @@ class Api::V1::BusinessCardsController < ApplicationController
           priority: subcategory.priority,
           slug: subcategory.slug,
           logo_url: subcategory.logo_url,
+          banner_url: subcategory.banner_url,
           cards_count: subcategory_cards_count
         }
       end
@@ -165,6 +166,7 @@ class Api::V1::BusinessCardsController < ApplicationController
         slug: category.slug,
         logo_url: category.logo_url,
         cards_count: total_cards_count,
+        banner_url: category.banner_url,
         business_sub_categories: subcategories_with_card_counts
       }
     end
