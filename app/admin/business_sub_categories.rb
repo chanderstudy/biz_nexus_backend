@@ -33,11 +33,15 @@ ActiveAdmin.register BusinessSubCategory do
       row "Business Categories" do |sub_category|
         BusinessCategory.where(id: sub_category.business_category_ids).pluck(:name).join(', ')
       end
-      row "Logo" do |sub_category|
-        image_tag(sub_category.logo,width:100,height:80)
+      if business_sub_category.logo.present?
+        row "Logo" do |category|
+          image_tag(category.logo,width:100,height:80)
+        end
       end
-      row "Banner" do |sub_category|
-        image_tag(sub_category.banner,width:100,height:80)
+      if business_sub_category.banner.present?
+        row "Banner" do |category|
+          image_tag(category.banner,width:100,height:80)
+        end
       end
       row :created_at
       row :updated_at

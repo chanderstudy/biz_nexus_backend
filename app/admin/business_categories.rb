@@ -50,11 +50,15 @@ ActiveAdmin.register BusinessCategory do
       row :priority
       row :publish
       row :category_type
-      row "Logo" do |category|
-        image_tag(category.logo,width:100,height:80)
+      if business_category.logo.present?
+        row "Logo" do |category|
+          image_tag(category.logo,width:100,height:80)
+        end
       end
-      row "Banner" do |category|
-        image_tag(category.banner,width:100,height:80)
+      if business_category.banner.present?
+        row "Banner" do |category|
+          image_tag(category.banner,width:100,height:80)
+        end
       end
       row :created_at
       row :updated_at
