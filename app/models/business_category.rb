@@ -3,6 +3,7 @@ class BusinessCategory < ApplicationRecord
   validates :name, presence: true, length: { maximum: 128 }
   has_one_attached :logo
   has_one_attached :banner
+  before_save :set_default_priority
 
   def business_sub_categories
     BusinessSubCategory.where('? = ANY(business_category_ids)', id)
@@ -23,4 +24,11 @@ class BusinessCategory < ApplicationRecord
   def banner_url
     Rails.application.routes.url_helpers.rails_blob_url(banner) if banner.attached?
   end
+
+  private
+
+  def set_default_priority
+    self.priority ||= 0
+  end
+
 end

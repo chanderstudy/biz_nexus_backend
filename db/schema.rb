@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_13_091531) do
+ActiveRecord::Schema[7.2].define(version: 2024_12_29_152332) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -173,6 +173,13 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_13_091531) do
     t.bigint "owned_by_id"
     t.integer "business_sub_category_ids", default: [], array: true
     t.integer "business_card_for"
+    t.string "experience"
+    t.time "opening_time"
+    t.time "closing_time"
+    t.boolean "smoking_area"
+    t.boolean "parking"
+    t.integer "since"
+    t.boolean "online_booking"
     t.index ["area_id"], name: "index_business_cards_on_area_id"
     t.index ["city_id"], name: "index_business_cards_on_city_id"
     t.index ["continent_id"], name: "index_business_cards_on_continent_id"
@@ -181,6 +188,13 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_13_091531) do
     t.index ["owned_by_id"], name: "index_business_cards_on_owned_by_id"
     t.index ["portal_id"], name: "index_business_cards_on_portal_id"
     t.index ["state_id"], name: "index_business_cards_on_state_id"
+  end
+
+  create_table "business_cards_services", id: false, force: :cascade do |t|
+    t.bigint "business_card_id", null: false
+    t.bigint "service_id", null: false
+    t.index ["business_card_id", "service_id"], name: "index_business_cards_services_on_card_id_and_service_id", unique: true
+    t.index ["service_id", "business_card_id"], name: "index_services_business_cards_on_service_id_and_card_id"
   end
 
   create_table "business_categories", force: :cascade do |t|
@@ -426,6 +440,15 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_13_091531) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "services", force: :cascade do |t|
+    t.string "title"
+    t.string "description"
+    t.integer "priority"
+    t.integer "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "social_media_links", force: :cascade do |t|
     t.integer "social_media_type"
     t.integer "priority"
@@ -471,6 +494,35 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_13_091531) do
     t.integer "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "time_tables", force: :cascade do |t|
+    t.time "monday_opening_time"
+    t.time "monday_closing_time"
+    t.time "tuesday_opening_time"
+    t.time "tuesday_closing_time"
+    t.time "wednesday_opening_time"
+    t.time "wednesday_closing_time"
+    t.time "thursday_opening_time"
+    t.time "thursday_closing_time"
+    t.time "friday_opening_time"
+    t.time "friday_closing_time"
+    t.time "saturday_opening_time"
+    t.time "saturday_closing_time"
+    t.time "sunday_opening_time"
+    t.time "sunday_closing_time"
+    t.boolean "monday_is_open", default: false, null: false
+    t.boolean "tuesday_is_open", default: false, null: false
+    t.boolean "wednesday_is_open", default: false, null: false
+    t.boolean "thursday_is_open", default: false, null: false
+    t.boolean "friday_is_open", default: false, null: false
+    t.boolean "saturday_is_open", default: false, null: false
+    t.boolean "sunday_is_open", default: false, null: false
+    t.string "timetableable_type"
+    t.bigint "timetableable_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["timetableable_type", "timetableable_id"], name: "index_time_tables_on_timetableable"
   end
 
   create_table "transactions", force: :cascade do |t|

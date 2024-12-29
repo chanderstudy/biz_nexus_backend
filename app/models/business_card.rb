@@ -12,6 +12,8 @@ class BusinessCard < ApplicationRecord
   has_many :faqs, as: :faqable, dependent: :destroy
   has_many :social_media_links, as: :linkable, dependent: :destroy
   has_many :documents, as: :documentable, dependent: :destroy
+  has_and_belongs_to_many :services
+  has_one :time_table, as: :timetableable, dependent: :destroy
 
   BCARD_TYPES = %w[free paid].freeze
   enum bcard_type: %i[free paid]

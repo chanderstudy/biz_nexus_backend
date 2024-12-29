@@ -5,7 +5,7 @@ class Api::V1::BusinessCardsController < ApplicationController
     page = params[:page] || 1
     per_page = params[:per_page] || 10
 
-    categories = BusinessCategory.page(page).per(per_page)
+    categories = BusinessCategory.order(priority: :asc).page(page).per(per_page)
 
     if categories.present?
       render json: {
@@ -31,10 +31,10 @@ class Api::V1::BusinessCardsController < ApplicationController
     category_ids = params[:category_ids].present? ? params[:category_ids].split(',').map(&:to_i) : []
 
     if category_ids.present?
-      subcategories = BusinessSubCategory.where("business_category_ids && ARRAY[?]::integer[]", category_ids)
+      subcategories = BusinessSubCategory.order(priority: :asc).where("business_category_ids && ARRAY[?]::integer[]", category_ids)
                                        .page(page).per(per_page)
     else
-      subcategories = BusinessSubCategory.page(page).per(per_page)
+      subcategories = BusinessSubCategory.order(priority: :asc).page(page).per(per_page)
     end
 
     if subcategories.present?
@@ -65,7 +65,7 @@ class Api::V1::BusinessCardsController < ApplicationController
 
     if category_ids.present?
       # Fetch subcategory IDs associated with the provided category IDs
-      subcategory_ids_from_categories = BusinessSubCategory.where("business_category_ids && ARRAY[?]::integer[]", category_ids).pluck(:id)
+      subcategory_ids_from_categories = BusinessSubCategory.order(priority: :asc).where("business_category_ids && ARRAY[?]::integer[]", category_ids).pluck(:id)
       subcategory_ids += subcategory_ids_from_categories
     end
 
@@ -85,6 +85,10 @@ class Api::V1::BusinessCardsController < ApplicationController
             :city,
             :area,
             :portal,
+            :time_table,
+            services: {
+              methods: [:logo_url, :banner_url]
+            },
             faqs: {},
             documents: {
               methods: :file_url
@@ -117,6 +121,10 @@ class Api::V1::BusinessCardsController < ApplicationController
             :city,
             :area,
             :portal,
+            :time_table,
+            services: {
+              methods: [:logo_url, :banner_url]
+            },
             faqs: {},
             documents: {
               methods: :file_url
@@ -133,51 +141,51 @@ class Api::V1::BusinessCardsController < ApplicationController
   end
 
 
- def categories
-  categories = BusinessCategory.all
-  categories_with_subcategories = categories.map do |category|
-    subcategories = BusinessSubCategory.where('? = ANY(business_category_ids)', category.id)
-    
-    subcategories_with_card_counts = subcategories.map do |subcategory|
-      subcategory_cards_count = BusinessCard.where('business_sub_category_ids && ARRAY[?]::integer[]', [subcategory.id]).count
+  def categories
+    categories = BusinessCategory.order(priority: :asc).all
+    categories_with_subcategories = categories.map do |category|
+      subcategories = BusinessSubCategory.order(priority: :asc).where('? = ANY(business_category_ids)', category.id)
       
-      if subcategory_cards_count > 0
+      subcategories_with_card_counts = subcategories.map do |subcategory|
+        subcategory_cards_count = BusinessCard.where('business_sub_category_ids && ARRAY[?]::integer[]', [subcategory.id]).count
+        
+        if subcategory_cards_count > 0
+          {
+            id: subcategory.id,
+            name: subcategory.name,
+            description: subcategory.description,
+            priority: subcategory.priority,
+            slug: subcategory.slug,
+            logo_url: subcategory.logo_url,
+            banner_url: subcategory.banner_url,
+            cards_count: subcategory_cards_count
+          }
+        end
+      end.compact # Remove nil values for subcategories with no cards
+      
+      total_cards_count = subcategories_with_card_counts.sum { |subcat| subcat[:cards_count] }
+
+      if total_cards_count > 0
         {
-          id: subcategory.id,
-          name: subcategory.name,
-          description: subcategory.description,
-          priority: subcategory.priority,
-          slug: subcategory.slug,
-          logo_url: subcategory.logo_url,
-          banner_url: subcategory.banner_url,
-          cards_count: subcategory_cards_count
+          id: category.id,
+          name: category.name,
+          description: category.description,
+          priority: category.priority,
+          slug: category.slug,
+          logo_url: category.logo_url,
+          cards_count: total_cards_count,
+          banner_url: category.banner_url,
+          business_sub_categories: subcategories_with_card_counts
         }
       end
-    end.compact # Remove nil values for subcategories with no cards
-    
-    total_cards_count = subcategories_with_card_counts.sum { |subcat| subcat[:cards_count] }
+    end.compact # Remove nil values for categories with no cards
 
-    if total_cards_count > 0
-      {
-        id: category.id,
-        name: category.name,
-        description: category.description,
-        priority: category.priority,
-        slug: category.slug,
-        logo_url: category.logo_url,
-        cards_count: total_cards_count,
-        banner_url: category.banner_url,
-        business_sub_categories: subcategories_with_card_counts
-      }
-    end
-  end.compact # Remove nil values for categories with no cards
-
-  render json: { data: categories_with_subcategories }
-end
+    render json: { data: categories_with_subcategories }
+  end
 
 
   def index
-    business_cards = BusinessCard.page(params[:page] || 1).per_page(params[:per_page] || 10)
+    business_cards = BusinessCard.page(params[:page] || 1).per(params[:per_page] || 10)
 
     if business_cards.present?
       render json: {
@@ -189,6 +197,10 @@ end
             :city,
             :area,
             :portal,
+            :time_table,
+            services: {
+              methods: [:logo_url, :banner_url]
+            },
             faqs: {},
             documents: {
               methods: :file_url
@@ -217,7 +229,11 @@ end
             :city,
             :area,
             :portal,
+            :time_table,
             faqs: {},
+            services: {
+              methods: [:logo_url, :banner_url]
+            },
             documents: {
               methods: :file_url
             }

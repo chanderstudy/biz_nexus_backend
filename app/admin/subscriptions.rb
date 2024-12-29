@@ -15,8 +15,8 @@ ActiveAdmin.register Subscription do
 
   form do |f|
     f.inputs 'Plan Details' do
-      f.input :start_date
-      f.input :end_date
+      f.input :start_date, as: :date_time_picker
+      f.input :end_date, as: :date_time_picker
       f.input :status
     end
     f.actions

@@ -5,6 +5,7 @@ class BusinessSubCategory < ApplicationRecord
   validate :must_have_business_categories
   has_one_attached :logo
   has_one_attached :banner
+  before_save :set_default_priority
 
   belongs_to :business_category, optional: true
 
@@ -32,6 +33,10 @@ class BusinessSubCategory < ApplicationRecord
   end
 
   private
+
+  def set_default_priority
+    self.priority ||= 0
+  end
 
   def must_have_business_categories
     errors.add(:business_category_ids, "must have at least one category") if business_category_ids.blank? || business_category_ids.all?(&:blank?)
