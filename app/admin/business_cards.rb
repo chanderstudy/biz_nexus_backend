@@ -228,6 +228,21 @@ ActiveAdmin.register BusinessCard do
         end
       end
 
+      panel "Quote Request" do
+        table_for business_card.quote_requests do
+          column :name
+          column :email
+          column :phone
+          column :status
+          column "Actions" do |quote_request|
+            links = []
+            links << link_to("View", admin_quote_request_path(quote_request))
+            links << link_to("Edit", edit_admin_quote_request_path(quote_request))
+            safe_join(links, " | ")
+          end
+        end
+      end
+
       panel "Social Media Links" do
         table_for resource.social_media_links do
           column "Type" do |sml| sml.social_media_type end

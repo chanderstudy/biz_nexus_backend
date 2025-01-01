@@ -9,11 +9,14 @@ class BusinessCard < ApplicationRecord
   belongs_to :owned_by, class_name: 'User', foreign_key: :owned_by_id, optional: true
   belongs_to :created_by, class_name: 'AdminUser', foreign_key: :created_by_id
   belongs_to :managed_by, class_name: 'AdminUser', foreign_key: :managed_by_id
-  has_many :faqs, as: :faqable, dependent: :destroy
-  has_many :social_media_links, as: :linkable, dependent: :destroy
-  has_many :documents, as: :documentable, dependent: :destroy
-  has_and_belongs_to_many :services
+  
   has_one :time_table, as: :timetableable, dependent: :destroy
+  has_and_belongs_to_many :services
+  has_many :social_media_links, as: :linkable, dependent: :destroy
+  has_many :quote_requests, as: :quotable, dependent: :destroy
+  has_many :documents, as: :documentable, dependent: :destroy
+  has_many :business_seo_profile, as: :seoprofileable, dependent: :destroy
+  has_many :faqs, as: :faqable, dependent: :destroy
 
   BCARD_TYPES = %w[free paid].freeze
   enum bcard_type: %i[free paid]
@@ -21,8 +24,6 @@ class BusinessCard < ApplicationRecord
   enum business_card_for: %i[individual business]
   # enum promotion_type: %i[test ttest1]
   
-  
-  has_many :business_seo_profile, as: :seoprofileable, dependent: :destroy
   validates :name, presence: true, length: { maximum: 128 }
   after_initialize :set_default_values, if: :new_record?
 

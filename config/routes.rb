@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resources :districts, only: [:index, :show]
+      resource :quote_requests, only: :create
       resources :business_cards, only: [:index, :show] do
         collection do
           get :search
