@@ -2,10 +2,10 @@
 # frozen_string_literal: true
 
 # Change the directory to your app directory
-directory '/home/deploy/biz_nexus_backend/current'
+directory '/home/ubuntu/biz_nexus_backend/current'
 
 # Path to your config.ru file
-rackup '/home/deploy/biz_nexus_backend/current/config.ru'
+rackup '/home/ubuntu/biz_nexus_backend/current/config.ru'
 
 # Set the environment to production
 environment 'production'
@@ -14,20 +14,20 @@ environment 'production'
 tag ''
 
 # Path to the PID file
-pidfile '/home/deploy/biz_nexus_backend/current/tmp/pids/puma.pid'
+pidfile '/home/ubuntu/biz_nexus_backend/current/tmp/pids/puma.pid'
 
 # Path to the state file
-state_path '/home/deploy/biz_nexus_backend/current/tmp/pids/puma.state'
+state_path '/home/ubuntu/biz_nexus_backend/current/tmp/pids/puma.state'
 
 # Redirect STDOUT and STDERR to log files
-stdout_redirect '/home/deploy/biz_nexus_backend/current/log/puma_access.log',
-                '/home/deploy/biz_nexus_backend/current/log/puma_error.log', true
+stdout_redirect '/home/ubuntu/biz_nexus_backend/current/log/puma_access.log',
+                '/home/ubuntu/biz_nexus_backend/current/log/puma_error.log', true
 
 # Configure the number of threads
 threads 2, 2
 
 # Bind to the Unix socket
-# bind 'unix:////home/deploy/digi_donation/shared/tmp/sockets/puma.sock'
+# bind 'unix:////home/ubuntu/digi_donation/shared/tmp/sockets/puma.sock'
 bind 'tcp://127.0.0.1:9295'
 
 # Number of worker processes
