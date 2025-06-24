@@ -7,3 +7,14 @@ development:
   password: bbe0045
   host: localhost
   port: 5432
+
+
+production:
+  adapter: postgresql
+  encoding: unicode
+  database: new_db
+  pool: 5
+  username: bbe0045
+  password: bbe0045
+  host: localhost
+  port: 5432
