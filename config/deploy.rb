@@ -10,7 +10,7 @@ set :puma_conf, "#{current_path}/config/puma.rb"
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
 # Default deploy_to directory is /var/www/my_app_name
-set :deploy_to, "/home/deploy/biz_nexus_backend"
+set :deploy_to, "/home/ubuntu/biz_nexus_backend"
 
 # Default value for :format is :airbrussh.
 # set :format, :airbrussh
@@ -23,7 +23,7 @@ set :deploy_to, "/home/deploy/biz_nexus_backend"
 # set :pty, true
 
 # Default value for :linked_files is []
-append :linked_files, "config/database.yml", 'config/master.key', "config/credentials/production.key", "puma.rb"
+append :linked_files, "config/database.yml", "config/credentials/production.key"
 
 # Default value for linked_dirs is []
 append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "tmp/webpacker", "public/system", "vendor","storage"
