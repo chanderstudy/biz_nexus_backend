@@ -3,7 +3,7 @@
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
     origins "http://localhost:3000",
-            "https://main.d2p17lonhmwyyi.amplifyapp.com",
+            "https://main.d35d7103zms7ma.amplifyapp.com/",
             "http://localhost:3001",
             "https://nexus.vicancode.com",
             "https://nexus-app.netlify.app",
