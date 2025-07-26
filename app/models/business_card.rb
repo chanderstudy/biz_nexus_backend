@@ -49,7 +49,7 @@ class BusinessCard < ApplicationRecord
     [
       "state", "district", "city", "area",
       "business_category", "business_sub_categories",
-      "business_seo_profile", "social_media_profile"
+      "business_seo_profile", "social_media_links"
     ]
   end
 

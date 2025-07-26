@@ -1,12 +1,13 @@
 class SocialMediaLink < ApplicationRecord
-  # enum platform: {
-  #   facebook: 0,
-  #   youtube: 1,
-  #   instagram: 2,
-  #   justdial: 3,
-  #   linkedin: 4,
-  #   other: 5
-  # }
+  enum social_media_type: {
+    facebook: 0,
+    instagram: 1,
+    twitter: 2,
+    youtube: 3,
+    linkedin: 4,
+    pinterest: 5,
+    youtube_video_tour: 6
+  }
 
   enum status: {
     deactivate: 0,

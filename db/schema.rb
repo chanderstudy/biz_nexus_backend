@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_01_01_173404) do
+ActiveRecord::Schema[7.2].define(version: 2025_07_19_163652) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -180,6 +180,11 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_01_173404) do
     t.boolean "parking"
     t.integer "since"
     t.boolean "online_booking"
+    t.boolean "verified"
+    t.boolean "trusted"
+    t.boolean "trending"
+    t.integer "rating"
+    t.integer "review_count"
     t.index ["area_id"], name: "index_business_cards_on_area_id"
     t.index ["city_id"], name: "index_business_cards_on_city_id"
     t.index ["continent_id"], name: "index_business_cards_on_continent_id"

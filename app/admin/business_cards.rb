@@ -12,7 +12,7 @@ ActiveAdmin.register BusinessCard do
                 :catalog_publish, :social_media_publish, :photo_gallery_publish, 
                 :video_gallery_publish, :feedback_publish, :enquiry_publish, 
                 :external_portal_publish, :achivement, :created_by_id, 
-                :managed_by_id, :owned_by_id, :country_id, :continent_id,
+                :managed_by_id, :owned_by_id, :country_id, :continent_id, :verified, :trusted, :trending, :rating, :review_count,
                 business_seo_profile_attributes: [:id, :active, :keywords, :meta_tag, :description, :_destroy],
                 faqs_attributes: [:id, :question, :answer, :_destroy],
                 documents_attributes: [:id, :title, :document_type, :status, :file, :_destroy],
@@ -27,6 +27,11 @@ ActiveAdmin.register BusinessCard do
     column :email
     column :address
     column :landmark
+    column :verified
+    column :trusted
+    column :trending
+    column :rating
+    column :review_count
     column :mobile
     column :latitude
     column :longitude
@@ -41,8 +46,8 @@ ActiveAdmin.register BusinessCard do
     column :bank_account
     column :bank_ifsc
     column :bank_type
-    column :continent # Added
-    column :country   # Added
+    column :continent
+    column :country
     column :state
     column :district
     column :city
@@ -85,6 +90,11 @@ ActiveAdmin.register BusinessCard do
       f.input :latitude
       f.input :longitude
       f.input :bcard_type
+      f.input :verified
+      f.input :trusted
+      f.input :trending
+      f.input :rating
+      f.input :review_count
       f.input :business_card_for
       f.input :bcard_power
       f.input :business_sub_category_ids, as: :select, 
@@ -108,10 +118,6 @@ ActiveAdmin.register BusinessCard do
       f.input :established_date
       f.input :short_url
       f.input :published
-      # f.input :promotion_type, as: :select, 
-      #   collection: [['Free listing', 'free_listing'],['Promotion', 'promotion'], ['Advertisement', 'advertisement']],
-      #   include_blank: false, 
-      #   input_html: { value: 'free_listing' }
       f.input :plan_id
       f.input :qr_publish
       f.input :bank_name
@@ -175,6 +181,11 @@ ActiveAdmin.register BusinessCard do
       row :landmark
       row :mobile
       row :latitude
+      row :verified
+      row :trusted
+      row :trending
+      row :rating
+      row :review_count
       row :longitude
       row :bcard_type
       row :business_card_for

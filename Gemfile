@@ -33,6 +33,7 @@ gem 'devise'
 gem 'cancancan'
 gem 'draper'
 gem 'pundit'
+gem 'jwt'
 
 gem 'pg', '~> 1.5', '>= 1.5.6'
 

@@ -122,6 +122,7 @@ class Api::V1::BusinessCardsController < ApplicationController
             :area,
             :portal,
             :time_table,
+            :social_media_links,
             services: {
               methods: [:logo_url, :banner_url]
             },
@@ -198,6 +199,7 @@ class Api::V1::BusinessCardsController < ApplicationController
             :area,
             :portal,
             :time_table,
+            :social_media_links,
             services: {
               methods: [:logo_url, :banner_url]
             },
@@ -230,6 +232,7 @@ class Api::V1::BusinessCardsController < ApplicationController
             :area,
             :portal,
             :time_table,
+            :social_media_links,
             faqs: {},
             services: {
               methods: [:logo_url, :banner_url]
